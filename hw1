@@ -1,0 +1,65 @@
+#! /bin/bash 
+# Jason Quisberth  
+# CS 507
+# Made on the Mac.
+
+# hw 1
+# bash shell vacuum cleaner 
+
+typeset -i i=1 #counter of array element
+typeset -i prev=0
+# set maxline to 80 as per hw instuctions
+typeset -i maxline=80
+# set number of lines to 10 as per hw instructions
+typeset -i halfCycle=11
+typeset -i line=1
+typeset goRight
+typeset goLeft
+goLeft[0]=">==/"
+goRight[0]="\==<"
+
+
+while((line<halfCycle));do
+
+    for i in $(seq 1 1 ${maxline-1})
+    do
+	    # change color using modulus of 13 (prime number)
+	    # move cursor to next position to erase
+	    echo -e "\e[1;3"$((13 % $line ))"m \e[${line};0H"
+
+	    # only want to create arrays once
+            if [ "$line" = '1' ]
+            then
+                goRight[${i}]=" ${goRight[$prev]}"
+                goLeft[${i}]=" ${goLeft[$prev]}"
+            fi
+            
+	    # vacuum going right echo 
+            echo -n "${goRight[${i}]}"
+            echo -e "\e[K\e[A"
+            prev=$prev+1
+            sleep 0.01
+    done
+    
+    line=$line+1
+    # clear vacuum residue and change color
+    echo -e "\e[1;3"$((13 % $line ))"m \e[K"
+    
+    # seq -> start -> increment -> end 
+    for j in $(seq ${maxline-1} -1 0)
+    do
+	# vacuum now going left
+        echo -n "${goLeft[${j}]}" 
+        echo -e "\e[K\e[A"
+        sleep 0.01
+    done
+    
+    # change color back and delete trailing vacuum residue
+    echo -e "\e[K \e[0m"
+    line=$line+1
+    
+    done
+
+# clear remaining space in order to completely clean space
+clear
+echo "Burp!!"
