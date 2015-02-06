@@ -1,0 +1,208 @@
+Section 1: Data Types and Variables
+
+    * All variables in C must be declared or defined prior to use
+    * Declaration: gives typing information about a variable
+    * Definition : is a declaration plus actually causes memory to be assigned
+
+
+Simple Data Types
+
+                                   Min
+    Type                           Range               Bytes
+    ----                           -----               -----
+    void                                                 0
+    signed   char               -128 to         127      1
+    unsigned char                  0 to         255      1
+    enum                      -32768 to         32767    2  (may be 4)
+    signed   short            -32768 to         32767    2
+    unsigned short                 0 to         65535    2
+    signed   int              -32768 to         32767    2  (may be 4)
+    unsigned int                   0 to         65535    2  (may be 4)
+    signed   long     -2,147,483,648 to 2,147,483,647    4
+    unsigned long                  0 to 4,294,967,295    4
+    float                   3.4e-38  to      3.4e+38     4
+    double                  1.7e-308 to      1.7e+308    8
+    (pointer)                                            4
+
+    Ex.  char a,b,c;    /* allocates three bytes, one for each variable a, b,c */
+    Ex.  char a= 'b';   /* initialize a to the character 'b'                   */
+
+    Prob1: Write a set of declarations, one for each variable type above.
+
+
+Pointers     ..data type.. *varname;
+
+    A pointer variable simply holds an address.  In that sense all
+    pointers are the same.  However, pointers are declared so that
+    they point to some specific type; doing basic arithmetic to
+    that pointer (adding one, subtracting two) is actually done 
+    in increments of the size of the object being pointed to.
+
+    Ex.  Assume    char *x;   sizeof(char) is 1
+         that x has the value 0xa2340 (that's hexadecimal).
+         Then  x+1 is 0xa2341
+    
+    Ex.  Assume    float *x;  sizeof(float) is 4
+         that x has the value 0xa2340 (that's hexadecimal).
+         Then  x+1 is 0xa2344
+
+    Functions which normally are written like
+
+        type functionname(argument-list)
+        {
+        }
+
+    may also have variables holding pointers to them.  For example,
+
+        int (*f)(int);
+
+    declares a variable f that points to a function which takes
+    one argument of type int and returns an int.
+
+
+Aggregate Data Types
+
+    arrays : an array is a block of consecutive data items all of the
+             same type, referenced via a  [subscript] notation.
+             All arrays in C start with a subscript of zero:  a[0].
+
+             ex.  double abc[4];
+                  char   def[5];
+    
+    strings: strings are simply a convenient way of expressing an
+             array of char.
+
+             ex. "this is a string."   This form cannot be used
+             as a declaration, but can be used as initialization
+             (see pointers), as arguments to functions, and in
+             assignments.
+
+    structures:   struct StructureName {
+                      ..list of definitions..
+                      } ..list of declarations.. ;
+             
+             A structure holds a collection of data associated with
+             one instance of something (a StructureName).
+
+             ex.   struct Abc_str {
+                       char   x;
+                       double y;
+                       float  f[3];
+                       struct Abc_str *nxt;
+                       struct Abc_str *prv;
+                       };
+
+                This defines a collection of data whose leading
+                byte is a single char, followed by a double, etc.
+                Note the two pointers, too.
+
+
+    unions:    union UnionName {
+                   ..list of definitions..
+                   } ..list of declarations..;
+
+                A union syntactically resemble structures, but
+                all the data items begin at the same address
+                in memory.
+
+                ex. union Def_un {
+                        char c[4];
+                        long l;
+                        } u;
+
+Modifiers
+
+    bitfields:   when part of a structure.
+            int varname : qtybits;
+
+            ex. struct Bit_str {
+                    int b1:1;
+                    int b2:7;
+                    int b3:8;
+                    } ;
+
+    extern:  indicates that the variable is only being defined;
+             its allocation has been done in another file.
+
+    register: a suggestion to the compiler that the associated
+              variable should take over a machine register for
+              improved speed.  Usually such variables must be
+              either char or (short) int, and should not be
+              a function parameter.
+
+    static:  the value of the variable should be kept for
+             the duration of the program's run.  It also
+             restricts scope to the local function or file.
+
+    const:   used most often for function arguments, this
+             tells the compiler that its value will not
+             change.  Allows for some additional error
+             checking and optimization.
+
+    volatile: tells the compiler that the variable can
+             be changed at any time, not only by the
+             program itself, but via interrupts, etc.
+
+    typedef: used to define new types.
+
+            ex. typedef struct Animal_str Animal;
+                a new type of "Animal" is now available:
+                Animal animal;  is the same as
+                struct Animal_str animal;
+
+    Prob2: Write a file with the following definitions and declarations:
+
+        a) define x as an int.
+        b) define px as a pointer to int.
+        c) define a new type called plant using struct Plant_str.
+        d) define an array of 5 doubles.
+
+    Prob3: Attempt to use cdecl to analyze your types from Prob2.
+
+
+Casts
+
+    One can make C "think" that a variable of one type is actually
+    of another type.  This feature is most properly used with
+    the memory allocation functions such as malloc (see notes06)
+    which allocate memory for your use of type "void *".  The
+    type "void *", pointer to void, is sort of an anonymous
+    type.  Casts are written like types inside parentheses:
+
+        (int)
+        (int *)
+        (int (*)(int)) /* cast as pointer to function (int) returning int */
+
+Scope
+
+	There are three scopes in C:
+
+	global: * These variables are declared outside of functions.
+			* They may be made available by using "extern" in other files.  
+			* They may be initialized only in the file where they're declared
+
+            file1.c: x is declared here
+				int x= 1;
+
+			file2.c: x is made available here
+				extern int x;
+
+	file:	* These variables are declared outside of functions with the
+			  prefix "static".
+			* They may be initialized.
+			* They are accessible from the point of declaration to the
+			  end-of-file
+
+			file1.c: note the use of "static"
+				static int x= 2;
+
+	function:
+			* These variables are declared inside the function body or in
+			  their argument lists
+			* These variables may be initialized (and initialization occurs
+			  each time the function is entered).
+			* Prefixing a function-scope variable with "static" makes the
+			  variable have static lifetime -- ie. there's one copy, albeit
+			  accessible only while inside that function.
+			* Otherwise every function invocation will have its own copy of function
+			  scope variables.

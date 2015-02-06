@@ -1,0 +1,83 @@
+Formatted Printing
+
+There is an entire family of printf() functions, which are
+used to generate output to the screen, to files, and
+even to variables.
+
+    #include <stdio.h>
+    int fprintf(FILE *stream,const char *format,...);
+    int printf(const char *format,...);
+    int sprintf(char *s,const char *format,...);
+    int vfprintf(FIlE *stream,const char *format, va_list arg);
+    int vprintf(const char *format,va_list arg);
+    int vsprintf(char *s,const char *format, va_list arg);
+
+FILE is a type set up by <stdio.h>, the standard i/o header file.
+One may generate a FILE* by using pre-defined ones such as
+stdout or stderr, or use fopen() to open a file.
+
+The sprintf() and vsprintf() functions both generate formatted
+strings into variables that the program itself may use later.
+
+The format string is a list of bytes that are interpreted
+literally, contain format specification substrings, or special
+characters (\n == newline).
+
+General Form of a Format Specification Substring
+
+    %[flags][width][.precision]type
+
+    Format Specifier
+        d,i  signed decimal integers and longs
+        o    signed octal integers
+        u    unsigned decimal integers and longs
+        x,X  unsigned hexadecimal
+
+        f    signed floating point
+        e,E  signed floating point using scientific (exponent) notation
+        g,G  signed float of either e or f style
+
+        c    single character
+        s    string (an array of characters terminated by a \0)
+        %    %% prints a percent sign
+        
+        n    number of characters output so far
+        p    prints pointer address
+
+    Flags
+        -     causes left justification with blank padding
+        0     use zero padding
+        +     output will always begin with either + or -
+        blank positive values begin with blank
+        *     width specifier is supplied by the argument list
+        l     argument of type long int
+
+Example:
+    printf("%f\n",x);     -- prints x in floating format
+    printf("10.3f\n",x);  -- printfs x to take up ten spaces with
+                             3 digits to the right of the decimal ponit
+    printf("%10s\n",s);   -- prints a string from variable s
+
+Problems:
+    Prob 1:
+        float  f   = 1.0;
+        double d   = 2.3e4;
+        char   s[] = "abcdef";
+        int    i   = 5;
+        char   x   = 'z';
+
+        A basic program that will compile (and not do anything)
+        looks like:
+
+        #include <stdio.h>
+        int main()
+        {
+        }
+
+        Change the program above to include the declarations
+        as given and include printf()s to display the information,
+        one per line.
+
+    Prob2:
+        Write a program to display the string "abc" twice using
+        the following format: "<%10s> <%-10s>\n".

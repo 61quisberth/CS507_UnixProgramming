@@ -1,0 +1,67 @@
+Choices
+
+    C supports if-then-else (without a "then" :)...
+
+        if(expr) {
+            ..list-of-statements..
+            }
+        else if(expr) {
+            ..list-of-statements..
+            }
+        ..repeat-as-needed..
+        else {
+            ..list-of-statements..
+            }
+
+    The else if(){} and else{} sections are optional.  C will
+    evaluate each if-expression to see if any of them evaluate
+    to not-zero; others are subsequently skipped.
+
+    
+    C supports switch-case
+
+        switch(expr) {
+        case 1:
+            break;
+        case '2':
+            break;
+        default:
+            break;
+            }
+
+    The switch expression must evaluate to a char/integer/enumerated type, and
+    each of the cases must be one of the same types: char/integer/enumerated
+    type.  In other words,  case "abc":  isn't legal.  C will pass control
+    to the matching case.  Note that unless the "break" statement is included
+    C will fall through following cases.  If no case matches, the default:
+    case will match.
+
+Problem 1:
+
+    Write a program using if-else if-else which determines what grade should
+    be assigned to a score, assuming the standard grade-school standard of
+    90+=A, 80-89=B, etc.
+
+    Hints:
+        int main(int argc,char **argv)
+        {
+        int score;
+        sscanf(argv[1],"%d",&score);
+        ...
+        }
+
+Problem 2:
+
+    Modify the program above to use switch-case.
+
+    Hints:
+        int main(int argc,char **argv)
+        {
+        char tenscore;
+        char unitscore;
+
+        if(!strcmp("100",argv[1])) ...
+        tenscore = argv[1][0];
+        unitscore= argv[1][1];
+        ...
+        }
