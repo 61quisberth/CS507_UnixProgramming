@@ -1,6 +1,8 @@
 /* 
 Jason Quisberth CS 507 CUA 
 Made on ubuntu 14.04 (but still on a mac)
+To compile: gcc hw2.c -o hw2
+./hw2 int1 int2
 */
 
 #include <stdio.h>
