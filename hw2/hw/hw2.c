@@ -48,36 +48,42 @@ int main(int argc, char **argv){
 			sprintf(goRight[k]," %s",goRight[k-1]);
 			sprintf(goLeft[k]," %s",goLeft[k-1]);
 		}
-		
+	
+		/* some useful escape sequences 
+		\e[A \e[B \e[C \e[D
+		up down foreward backward 
+		*/	
 		/* iterate throughout each row and clean up
 		if row is odd, move right, else, move left */
 		for(j = 1; j < qtyRow; j++){
 			if (j%2 == 1){ /* if odd line, go right */
 				for(i= 1; i < qtyCol; i++) {
-					printf("\e[1;3%um",(rand() % 7+1)); /* set color */
+					printf("\e[1;3%um",(rand() % 7+1)); /* set random color */
 					printf("%s\n",goRight[i]);
-					printf("\e[1A\e[2K"); /* move cursor up and clear line */
+					printf("\e[1A\e[C"); /* move cursor up and clear line */
 					usleep(20000);
 					/* if at end of line, go to new line */
 					if(i == qtyCol-1)
-						printf("\n");
+						printf("\e[K\n");
 				}
 			}
-			else{
+			else{ /* go left */
 				for(m= qtyCol-1; m >= 0; m--) {
-					printf("\e[1;3%um",(rand() % 7+1)); /* set color */
+					printf("\e[1;3%um",(rand() % 7+1)); /* set random color */
 					printf("%s\n",goLeft[m]);
-					printf("\e[1A\e[2K");
+					printf("\e[1A\e[K");
+					/*printf("\e[1A\e[D");*/
 					usleep(20000);
 					/* if at end of line, go to new line */
 					if(m == 0)
-						printf("\n");
+						printf("\e[K\n");
 				}
 			}
 
 		}
-		printf("\e[Kburp!! \e[0m \n");
+		printf("\e[K\e[0m");
 		printf("\e[2J"); /* clear rest of screen */
+		printf("burp!\n");
 		return 0;
 	}
 }
