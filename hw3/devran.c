@@ -1,3 +1,6 @@
+/* Jason Quisberth hw 3 CS 507 CUA 
+   Print sequence of ASCII characters from a certain range from /dev/random
+*/
 #include <stdio.h>
 
 int main(int argc, char **argv)
@@ -20,7 +23,7 @@ int main(int argc, char **argv)
 
 	do{
 		c = fgetc(fp);
-		if(c > 32 && c<126){
+		if(c >= 32 && c<= 126){
 			str[cap] = c;
 			printf("%c ",str[cap]);		
 			acc++;
