@@ -1,0 +1,71 @@
+                            DrChip's Inline Debugger
+
+1. Beginnings
+
+    a) Extract: tar oxvf dbg.tar
+
+    b) Ranlib: if your Unix library system needs ranlib,
+       then edit the Makefile and remove the # from the
+       line in it using ranlib.  An easy way to find out
+       if your system needs ranlib is to "man ranlib";
+       no man page, no need for it.
+    
+    c) make
+
+
+2. Whatcha Got?
+
+    After the make succeeds, it will have generated a
+    file "xtdio.a" and "example".  Subsequent programs using DrChip's
+    inline debugger merely need to
+
+    #define DEBUG            (or -DDEBUG on the compile line)
+    #include "dbg.h"
+
+    and to include "xtdio.a" on their link.  The Makefile
+    also generates an example program, called "example".
+
+    Note that if DEBUG is not defined (whether by a
+    #define DEBUG or a -DDEBUG), then DrChip's inline
+    debugger is not in the object files at all.
+
+
+3. Running the Example
+
+    a) example
+
+        Nothing seems to happen.  This shows that if DrChip's inline debugger
+        isn't told to do anything, it won't.  Thus programs can be run as if
+        the debugger wasn't even in it.
+    
+    b) example -@
+        main(argc=2,argv<example -@>){
+        |f1(i=0){
+        ||f2(){
+        |||f3(j=3){
+        ||||[res=1]*=[j=3]=3
+        ||||[res=3]*=[j=2]=6
+        ||||[res=6]*=[j=1]=6
+        ||||return f3 6 }
+        |||return f2 }
+        ||return f1 }
+        |f2(){
+        ||f3(j=3){
+        |||[res=1]*=[j=3]=3
+        |||[res=3]*=[j=2]=6
+        |||[res=6]*=[j=1]=6
+        |||return f3 6 }
+        ||return f2 }
+        |return main 0 }
+
+    c) example -@ "on f3 1"
+        f3(j=3){
+        |[res=1]*=[j=3]=3
+        |[res=3]*=[j=2]=6
+        |[res=6]*=[j=1]=6
+        |return f3 6 }
+        f3(j=3){
+        |[res=1]*=[j=3]=3
+        |[res=3]*=[j=2]=6
+        |[res=6]*=[j=1]=6
+        |return f3 6 }

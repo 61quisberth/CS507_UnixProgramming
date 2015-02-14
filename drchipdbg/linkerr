@@ -1,0 +1,7 @@
+dbg.o: In function `dcontext':
+dbg.c:(.text+0x60): undefined reference to `pthread_mutexattr_init'
+dbg.c:(.text+0x6f): undefined reference to `pthread_mutexattr_settype'
+dbg.o: In function `initdbg':
+dbg.c:(.text+0x2bb6): undefined reference to `strprintf'
+dbg.c:(.text+0x2bd8): undefined reference to `strprintf'
+collect2: ld returned 1 exit status

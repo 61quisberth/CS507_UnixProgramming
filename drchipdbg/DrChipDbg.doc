@@ -1,0 +1,244 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+
+                     DrChip's Inline Debugger Documentation
+                     --------------------------------------
+
+                       Author: Charles E. Campbell, Jr.
+
+                     Copyright 1999 Charles E. Campbell, Jr.
+                      (Please read the <Copyright> license)
+
+ ---------------------------------------------------------------------
+
+A. Initialization
+
+    DrChip's Inline Debugger supplies a set of functions which you, the
+    programmer, may use to instrument your code.  You may use these
+    functions directly or by "disappearing macros" defined in <dbg.h>.
+    These "disappearing macros" either use the associated debugger function
+    calls if the DEBUG preprocessor symbol has been defined (typically by
+    #define DEBUG or by -DDEBUG on the command line) or make the code
+    vanish.  The big advantage is that DrChip's inline debugger code can be
+    compiled in or left out simply by compiling with or without -DDDEBUG.
+
+    The debugging system is energized by calling
+
+            Function                      Disappearing Macro
+        initdbg(&argc,argv);             Initdbg((&argc,argv));
+
+    early in the main program.
+
+ ---------------------------------------------------------------------
+
+B. DrChip's Inline Debugger Commands
+
+    initdbg() looks for a
+
+        -@ dbgfile [dbgfile2 ...]  [# [#]]
+    or
+        -@ "{on|ondis|keep|off} funcname [*] [detail-level] [:dtst1 [:dtst2]] [preq list]"
+
+    on the command line and processes a dbgfile in the first case.  The two
+    optional numbers are also read into the variables dtst1 and dtst2.  If the
+    optional numbers are not present on the command line, then both will be set to
+    DBG_DTSTOFF, which currently is -2.  Note:  debug files may not begin with an
+    integer or minus sign.
+
+    The second case is detected by having a string begin with "on" or "of"; in that
+    case, the argument is passed directly to initdbg3().  Debugger command files
+    and debugger commands may be intermixed on the command line.
+
+    The debugging system exhibits function-level control over printing of debugging
+    information.  The dbgmode contains three pieces of information:  a detail level
+    (0 and up), whether or not debugging is currently active (ie. on or off), and
+    whether debugging is to be inherited by deeper functions.  Debugging output is
+    preceded by a number of "|"s indicating the current debugging function depth.
+    See the <ReadMe> file for examples.
+
+    The debug file contains debugger command lines following one of the following
+    forms:
+
+        {on|ondis|off} funcname [*] [detail-level] [:#1 [:#2]] [preq list] [>file]
+        keep funcname [:dtst1 [:dtst2]]
+        del [funcname | *]
+
+        on|off      : during program flow, debugging will be turned on/off
+                      if the associated function name (funcname) is encountered.
+        keep        : don't modify debugging status, but allow changes to dtst1,2
+        ondis       : debugging for the given function is unchanged, but
+                      dbgswitch() can be used to turn it on.
+        funcname    : debugging information concerns this function name
+        *           : debugging mode will not be inherited by deeper
+                      routines (default: debug mode will be inherited)
+        detail-level: debugging detail levels are in the interval [0,15],
+                      with 0 as default (and least detail).
+        :#1         : a colon-number signifies a dtst1 value
+        :#2         : a colon-number signifies a dtst2 value
+        preq-list   : a list of function names, optionally preceded with no
+                      intervening white space by a "!".  These functions must
+                      be present in the current routine stack (or not present
+                      if preceded by a "!") for the debugging command to be fire.
+        >filename   : debugging output will be directed to this file.  It
+                      will be opened once, and debugging output appended to,
+                      the given file.
+
+        del funcname: delete debugging info on funcname from debugging system
+        del *       : delete all debugging info from debugging system
+
+ ---------------------------------------------------------------------
+
+C. The Functions Dictionary and Associated Disappearing Macros
+
+       Function                              Disappearing Macro
+       --------                              ------------------
+
+    void prt_traceback()                     Prt_traceback(())
+
+         prints the current routine stack (quaintly known as a traceback)
+
+
+    void edbg(char *fmt,...)                 Edbg((char *fmt,...))
+
+         edbg("funcname(...)",...): the function appears like a member of
+         the printf() family, except that the string must begin with
+         a funcname.  The funcname is checked against the debug file info
+         and, if the funcname appears in the debugging database, the
+         dbgmode is modified appropriately.  This call is to be placed at
+         the beginning of every function (to be debugged); it signifies
+         that the function has been entered. The string will be printed if
+         the dbgmode so indicates at a detail-level of zero.
+
+         Don't terminate the format with a "\n"; the debugger will
+         automatically append a " {\n".
+
+
+    void rdbg(char *fmt,...)                 Rdbg((char *fmt,...))
+
+         rdbg("funcname ...",...): the function appears like a member of
+         the printf() family, except that the format string must begin with
+         the current funcname.  This call is to be placed just before every
+         return point; it signifies that the function is returning.  The
+         string will be printed if the dbgmode so indicates at a
+         detail-level of zero.
+
+         Don't terminate the format with a "\n"; the debugger will
+         automatically append a " }\n".
+
+
+    int  dprintf(int detail,char *fmt,...)   Dprintf((int detail,char *fmt,...))
+
+         dprintf(detail-level,"...",...): except for the first integer
+         argument, this function appears like a member of the printf()
+         family.  The detail-level is an integer between 0 to 15.  The data
+         will be printed with the usual leading dots indicating routine
+         depth.  This function returns a 1 if debugging is enabled, 0 else.
+
+
+    int  dbgswitch(int on)                   Dbgswitch((int on))
+
+         If dtst1 and optionally dtst2 were entered on the command line,
+         then dbgswitch can be used to further delineate debugging
+         selection.  Basically, dbgswitch takes a true/false (0=false,
+         other=true) and will turn dbgmode on/off as indicated.  dtst1 and
+         dtst2 may, of course, be used in the test.
+
+         This allows you to make selective debugging on certain calls to
+         a function, if the selection can be made to depend on an integer.
+
+
+    void initdbg(int *argc,char **argv)      Initdbg((int *argc,char **argv))
+
+         Call initdbg(&argc,argv) at the beginning of the main program.
+
+
+    void initdbg2(char *dbgfile)             Initdbg2((char *dbgfile))
+
+         The function processes all the lines in the dbgfile using
+         initdbg3.  It is called by initdbg().
+
+
+    void initdbg3(char *buf)                 Initdbg3((char *buf))
+
+         The function processes a single line, usually provided by
+         initdbg2(), and modifies the debugging database.
+
+
+    void prt_dbgstr()                        Prt_dbgstr(())
+
+         Prints out the entire debugging database.  This function is useful
+         for documenting a particular debugging run with what debugging
+         information was used.
+
+
+    int dbgtst(int detail)                   Dbgtst((int detail))
+
+         This function tests to see if a dprintf() at the specified detail
+         level would print or not.  This is useful for doing things inside
+         a #ifdef DEBUG ... #endif block:
+
+         #ifdef DEBUG
+         if(dbgtst(2)) {
+              }
+         #endif
+
+ ---------------------------------------------------------------------
+
+D. Usage Notes
+
+    One should put
+
+        Edbg(("funcname(...)",...));
+    
+    at the beginning of every function and
+
+        Rdbg(("funcname ...",...));
+    
+    just before every return point.  Note that the edbgs and rdbg's
+    "funcname" should match exactly; the debugger will terminate your
+    program if it tries to return and finds that the funcname does not
+    match the one it has for function entry.  That's because the debugger
+    output has become misleading; the debugger doesn't know if you're
+    missing an edbg() or rdbg(), merely have misspellings of the function
+    name, or what.  Having an immediate termination supports the
+    programmer in determining which of these cases happened.
+
+    This version of the debugger does not work well in threads.  The debugger
+    internally retains the function calling list (what function called what
+    function).  Threads' function calls are overlapping and so corrupts the
+    list of calling functions.  A thread-safe version has been made for
+    Windoze and I am currently porting it to Unix.
+
+    I usually use detail-level to correspond to for/while/do loop nesting
+    depth, with detail level ==1 for not-in-loop, ==2 for inside one loop,
+    etc.
+
+    If you have a function that gets called in numerous places, but problems
+    are occurring only when called by some specific funcion, you may find
+    the "preq-list" (pre-requisite calling function list) helpful.  You
+    may specify that a function must or must not be on the calling stack
+    for the debugging command to take effect.
+
+    The Initdbg2(()) and Initdbg3(()) functions are used by Initdbg(()).
+    They are useful for building debugging interfaces:
+
+        while(fgets(cmdline,CMDLINESIZE,fp)) {
+            sscanf(cmdline,"%s",cmd);
+            ...
+
+        #ifdef DEBUG
+            else if(!strcmp(cmd,"dbg")) Initdbg3((cmdline + 4));
+        #endif
+            ...
+            }
+
+ ---------------------------------------------------------------------
+
+-----BEGIN PGP SIGNATURE-----
+Version: 2.6.2
+
+iQCVAwUBN0V459gdtXCdbCHhAQHU5AP/W5CD2trvS6Qrs7LwSd1UqlRT5uMs5cSE
+8UlHvqr/HiIvT3psCF8lpYFVj3YfeiO/pUByL2BME6ttdengdKBv+i1KdexzqJl5
+S1Jx5vxSWWerEZkW5okZD/sevKrZ1lEHMpI9Bohffs1XImy8TjF/dOmscybxmLk/
+xUGbasNMdC0=
+=7Qpk
+-----END PGP SIGNATURE-----

@@ -1,0 +1,79 @@
+Lab 4 Jason Quisberth CSC507 CUA
+----------
+1) It is done
+
+2)
+path to header file of xtdio.h
+/home/jason/Documents/CS507_UnixProgramming/drchipdbg
+
+path to header file of xtdio.a (including the file)
+/home/jason/Documents/CS507_UnixProgramming/drchipdbg/xtdio.a
+
+command
+gcc -I /home/jason/Documents/CS507_UnixProgramming/drchipdbg openseek.c /home/jason/Documents/CS507_UnixProgramming/drchipdbg/xtdio.a
+
+./a.out
+cat openseek.1
+this is just a test
+
+3)
+
+command
+gcc -I /home/jason/Documents/CS507_UnixProgramming/drchipdbg cheesey.c /home/jason/Documents/CS507_UnixProgramming/drchipdbg/xtdio.a
+
+./a.out
+
+wrote <Genesis> at beginning of file
+seeked to tenth byte _after_ the end of file
+at that location, writing <Revelations>
+
+
+cat cheesey.hole
+Genesis
+^@^@^@^@^@^@^@^@^@^@Revelations
+
+4)
+man open 
+/* looked at and observed the manual  page 
+went to /examples4/
+*/ 
+gcc -I /home/jason/Documents/CS507_UnixProgramming/drchipdbg open.c /home/jason/Documents/CS507_UnixProgramming/drchipdbg/xtdio.a
+
+Usage: open [r|w|a|c|e|t|b|R{ugo}|W{ugo}|X{ugo}] filename [arguments for writing]
+ r      open for read
+ w      open for write
+ a      open for append
+ c      open for create
+ e      open for exclusive
+ t      open with truncation (discard previous file contents)
+ b      open with non-blocking enabled
+ R{ugo} open with user/group/owner read  permission
+ W{ugo} open with user/group/owner write permission
+ X{ugo} open with user/group/owner exec  permission
+
+
+./open w lab4
+***error*** while attempting to use open(file<lab4>,flags=1x,mode=0): No such file or directory
+The file does not exist to open
+
+./open wc lab4
+cat: lab4: Permission denied
+User does not have permission to read file 
+4 ---------- 1 jason jason 17 Feb 13 19:38 lab4
+
+
+ls -lsa lab4
+the file contained 17 bytes
+rm lab4
+y
+
+./open wctRuWu lab4
+now user is allowed to read/write file
+cat lab4
+csc507 is great!
+4 -rw------- 1 jason jason    17 Feb 13 19:46 lab4
+
+
+./open r lab4
+read 17 bytes: <csc507 is great!^J(@>
+
