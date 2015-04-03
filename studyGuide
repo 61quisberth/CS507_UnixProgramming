@@ -1,0 +1,434 @@
+chmod 644 some file
+permissions: 4-read,2-write,1-execute
+6-user has r/w/e
+4-group has r only
+4-other have r only
+file descriptors:
+0-stdin,1-stdout,2-stderr
+
+printenv-prints envionment variables
+
+aliases - shorten typing needs by subing strings
+alias name='unix command with options'
+
+pipes - command line output can be fed into the input of another,
+commands run concurrently
+ls | grep .pdf -> display files whose name features ".pdf"
+
+i/o redirection
+>file 	output to file
+>>file 	appeands to file
+<file 	use file contents as input
+2>file	error outputted to file
+2>>file error output appended to file	
+2>&1	error output redirected to stdout
+">&" means to refirect a copy of
+cc myprog.c -o myprog 2> tmp
+
+pathname expansion
+~ 	home dir
+*	matches any string of characters
+?	matches any single character
+[...] 	matches chars in braces 
+
+quoting 
+'...' 	avoids expansion of whats inside
+"..."	removes magic except for $
+`...`	will run command in backquotes
+x=`ls $HOME` 	will list home dir and save to variable x
+
+environment variables
+export x="abc"
+unset x
+
+expression comparasons
+=	expressions match
+!=	expressiosn do not match
+<	lexicon less
+>	lexicon more 
+
+shell if
+if, then, elif, then elif, then, else, fi
+
+shell while
+while, do, done
+
+until,do, done
+
+for,do,done
+
+arrays
+typeset -i arrayName 
+arrayName[int]=...
+${arrayName[int]}
+------lecture02--------------
+pointers in c 
+int *ptr 
+int a = 2
+ptr = &a
+printf("%d",*ptr) // prints out value of p which is value of a
+-An address is simply an integer, and is an offset (in bytes) to somewhere in the process’ memory space
+-However, in C, pointers are declared with a type. The pointer, then, is the integer of bytes offset to where some typed item is stored (begins).
+-Doing basic arithmetic to that pointer (adding one, subtracting two) is actually done in increments of the size of the object being pointed to.
+
+pointer to functions is also allowable 
+int (*pf)(float);
+^ is a ponter to a function that takes a float as input and outputs int
+
+int C, strings always end with null btye
+Two string declaration examples
+char *x= "a simple string";
+char y[] = "another simple string";
+
+struct: datatype contains instances of other data types
+struct abc{
+	char c;
+	int a;	
+	struct hehe;
+	struct *ptr;
+};
+
+typedef needs to be called in order to use struct
+typedef struct abc abc_struct;
+abc_struct sample;
+
+union is similar to struct and the same syntax (almost)
+union abc{ char c;};
+** all data begins at same point in memory, they can override each other
+you should only declare one member of a union so no overriding occure
+when you declare a struct, each members have their own space in memory
+http://stackoverflow.com/questions/346536/difference-between-a-structure-and-a-union-in-c
+
+bitfields: allow for access to bits 
+struct bit_str{
+	int b1:1;
+	int b2:7;
+	int b3:2;
+}
+
+extern - variable is only being defined, its allocation is done in another file
+register - tells compiler that this variable should take over a machine register in order to gather speed
+static - value of this will be kept alive during duration of run, but only restricts its scope to the file or function it is in
+
+type modifiers
+volatile - variable can be changed at anytime even by interrupts and other means
+typedef is used to define new types 
+
+using extern: in order to use in other file, it must be declared in the file where it came from
+
+formatted printing 
+fprintf - to file
+printf - to display
+sprintf - to variable 
+
+format flaggings
+- 	blank padding
+0 	zero padding 
++	give sign +/-
+
+sample switch case 
+switch (expr){
+case 1:
+	doSomething;
+	break;
+case 2: 
+	doSomething;
+	break;
+default:
+	break;
+}
+
+command line args
+gcc -o myprog myprog.c
+argv[0] = gcc
+argv[1] = -o  
+argv[2] = myprog
+argv[3] = myprog.c
+
+defensive programmign 
+whenever you free a ptr, set it to null
+free(ptr);
+ptr = NULL;
+
+know memory allocations
+malloc, calloc, realloc 
+
+core dumps are usually caused by trying to access memory it does not own
+they are snapshots of state of memory and state at program termination
+
+gdb is a symbolic debugger
+
+gdb methods
+list - show ten lines around the current address
+where - prints backtrace of all stack frames
+printf - print format string
+backtrace - print trace of stackframes 
+up/down - move address up/down the call stack
+watch - set a watch point 
+
+using prerpcessor to debug
+compile gcc DEBUG
+then in code
+#ifdef DEBUG
+...
+#endif
+
+makefile
+----
+abc: abc.o
+	gcc abc.c -o abc
+
+this makefile says: abc depends upon the file abc.o; if abc.o is newer
+than abc, then re-build abc by executing cc abc.o -o abc.
+
+to create a library use unix command "ar"
+ar q libname.a list-of-files
+
+
+------lecture03------
+API - application program interface 
+features such as: 
+System configuration Process Control
+File Manipulation Interprocess Communications
+Process Creation Network Communication
+
+-1 is a typical error code by the API
+
+type of files in unix
+regular			text,binary, executables
+directory		files names and where-to-find info (inode****)
+link			hard links
+character devices	for physical devices that send data byte by byte
+block devices		for physical devices that send data in block
+sockets			interprocess communication
+pipes			interprocess communication
+
+make hard links with ln(shell) or link 
+
+filesystems reside in only one partition
+
+know slide 36 it is the unix file system archtecture***
+
+boot blocks
+--------
+appear at the beg of every file system
+contain boostrap code to initialize operating system
+super block - contains metadata on filesystem
+data blocks are typically 512 bytes
+superblocks contain array of free i-node indices 
+
+tables used in unix
+----
+file table - tracks next read/write on file (file descriptors)
+user file descriptio table - (kernel) holds indices of file desciptors in which every file feature a kernel level entry into this
+i-node table - describe file permissions and indices assocaited with data blocks
+
+I-nodes contain: file type, file access permission, size of file, pointers to data
+blocks for the file, etc
+it is a datastrucure for a file system object
+each inode contains 12 slots for direct indexing and then up to triple indexing is permitted using indirect indexing 
+
+hard link - new entry in a directory having the same i-node the target has
+only one copy of files content on disk hard links are just directory entries
+a file and directory may now be called by different names and paths 
+this increment inodes link count
+
+symbolic link - file that contains the path which can refernce another file in a file system
+
+To create: ln -s -real-path-filename- -fake-path-filename-
+To remove: rm -symbolic-link-filename-
+
+character device - for physical devices taht send byte by byte
+two numbers - major and minor device number 
+major - index to a kernel table of all device driver functions known to the system
+minor - data passed on to the device driver, the driver can use this to modify its behavior 
+
+to make char device 
+mknod /dev/cdsk c major-device-number minor-device-number 
+to make block device 
+mknod /dev/bdsk b major minor
+
+fstab is used to mount filesystems 
+
+FIFO files - named pipes, provide a buffer for one process to write into and for another to take as input 
+
+both processes need to have opened a FIFO file (one read and one write) before data goes through
+
+mkfifo -path-to-file-
+to remove use rm
+
+unix commands are issued by the shell 
+system calls are functions invoked interally by a program 
+
+what happens when you open a file
+kernel searches process' file descriptor table for an unused spot
+kernel examples its own file table for an unused spot for its reference 
+	if found, file descriptor points to kernel slot 
+	file entry points to inode table
+	file entry gets current file ptr of open file 
+	file table entry gets type of file to open (r,w,both)
+	ref count in file talbe entry set to 1 
+	ref count of inode is increased by one 
+
+what happens when you close a file 
+kernel sets file descriptor to unused 
+decrements file table entry by 1 
+process' file table entry set to unused 
+ref count in inode decraesed by 1 
+if hard link cnt of inode != 0 then success 
+make inode table entry as unused and deallocate disk space 
+return 0 
+
+-----lecture 04--------------
+umask - specifies permission bits to be masked off 
+used to set up default permissions 
+
+lseek allows for writing past end of file 
+
+file status functions 
+stat - sttaus given path
+fstat - status given file descriptor 
+lstat - status of link
+
+file permissions are inherited by the user to the program 
+
+*sticky bit - prevents unprivileged users from removing or renaming a file in a directory, even though it is world-writable. The sticky bit is found, for example, on the /tmp directory.
+
+Use chmod +t directoryname from the command line on a directory name to set
+this bit.
+
+Use chmod(path,S_ISVTX|S_ROTH|S_IWOTH|S_IXOTH) to make a directory have rwx
+and sticky bit for others in a program.
+
+access() - determines if function can access file in path in input
+
+change permissions with chmond(filepath) or fchmod(file descriptor)
+
+epoch time is since 00:00:00 jan 1, 1970 UTC 
+
+---lecture 05-------
+
+file and record locking 
+- used for regular files only 
+- two types, mandatory and advisory (linux supports both)
+- we typically use advisory
+- in the form of either read locks or write locks 
+
+read lock
+prevents overlapping write locks and allows read locks by other processes
+
+write lock 
+prevents overlapping read and/or write locks  (exclusive locking)
+
+advisory locks are not enforced but can be checked by other proecesses
+you can lock down to byte level 
+
+how advisory locking works 
+try to set to lock, if lock is acquired, read/write as desired, then release the lock 
+
+fcntl() sets a lock 
+F_SETLK sets locks, but does not block
+F_SETLKW sets lock and blocks until lock is acquired
+F_GETLK lock query – what process holds the locked file
+
+lock promotion handle overlapping locks by combinining into one larger lock 
+lock splitting - unlocking a middle portion of a locked region results in the process holding two locks
+lock[0,150]
+unlocking [50,100] → lock[0,49] and lock[101,150] 
+
+lockf tests, applys and remove a POSIX lock (error is locked by another)
+at end of processes, all locks are removed 
+flock() - applies or removes advisory locks (shared or exclusive)
+a file may only have a share or execlusive lock not both 
+
+roots cannot unlock mandatory locks but may kill the processes holding the locks 
+
+deadlock - when two or more processes are waiting for resources that the other has locked 
+unix usually kills one randomly solving the deadlock 
+
+directory APi
+int mkdir() also creates .. and . in order to use this dir
+linux uses dirent as a description data structure 
+rmdit() is ok not to current dir but another which you hvae write perms
+mknod is similar to mkdir but does not create .. and . only file system node
+
+pipe vs anom pipes
+mkfifo() vs pipe()
+mkfifo is like open in that it craetes a file 
+pipe creates an anonymous pipe, not a file and is useful for parent and child process combos 
+
+-----lecture 06 -----
+
+fifo's - client server communications 
+fifo's get one fifo per client but one one per server 
+
+*danging link - is when a symbolic link to a non-existant file
+
+lstat - descption of a symbolic link 
+
+unix allows for concurrent programs 
+
+process - an executing program; an execution context 
+child processes have their own virtual address space aka virtual memory 
+
+processes are given unique process numbers 
+
+system memory is divided into two memory spaces, user space and kernel space 
+
+process memory has its own memory space and divided into three sets
+text, data, and stack 
+aka
+code, static variables, and reigster variables, auto variables, and function calls
+
+u-area - user area that holds open file tables, singal actions, accounting info, and system stack segment  
+
+swap memory - memory to use when ram is full
+
+session - group of processes identified by a common id aka session id 
+
+process groups - processes handled together for job control purposes 
+
+process lifetime - begins at forking and ends after it ends 
+
+forking is when a process makes a copy of itself
+
+process with pids of 1 or 0 are called special processes 
+
+superuse's processes regonize a process if its pid is 0 
+
+child processes 
+ppid - parent processs id 
+do not inherit child locks 
+
+fork use, >0 then its a parent, ==0 its a child, -1 its an error
+
+copy-on-write - when fork copies memory pages that either the child or parent want to modify
+
+children cannot re-use atack space as a parent and child
+
+races - mutliple processes trying to do something with shared mem at the same time
+
+command pipes - coupling of pipe and dup2 in order to make the stdout or a parent to be the stdin of a child process 
+
+pipes are undirectional one may only specify reading or writing not both
+
+-----lecture07-----------
+signals - interrupt processes that causes other processing to do something else
+die, wake up, break out of blocked state, and receive an alarm
+signals are basically integers
+
+pending - a signal is pending if the process must handle it, but it has not done so
+
+signals of asynchronous which means your program will not continue until it fufills the action demanded by the signal
+happens regardless of current operation
+
+wait and pause causes processes to sleep 
+
+signal created with signal() 
+
+signal() is unreliable because it resets to SIG_DFL causing the signal handling function had to be re-installed 
+use sigset() and sigaction()
+
+sigaction() - modify the disposition of the signal 
+
+

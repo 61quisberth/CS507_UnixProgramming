@@ -1,0 +1,67 @@
+Script started on Fri 27 Mar 2015 09:09:04 PM EDT
+]0;jason@Jason-linux: ~/Documents/CS507_UnixProgramming/lab9/Lab09jason@Jason-linux:~/Documents/CS507_UnixProgramming/lab9/Lab09$ ./set[Kmget
+Enter the desired key in hex: 123
+
+Enter the operation
+permissions in octal: 777
+
+Enter corresponding number to
+set the desired flags:
+No flags                  = 0
+IPC_CREAT                 = 1
+IPC_EXCL                  = 2
+IPC_CREAT and IPC_EXCL    = 3
+Enter Flags               : 3
+
+Input was: key=0x123  opperm=O777  flags=O3
+
+Enter the number of desired semaphores for this set (25 max): 5
+
+The semid is 131073
+]0;jason@Jason-linux: ~/Documents/CS507_UnixProgramming/lab9/Lab09jason@Jason-linux:~/Documents/CS507_UnixProgramming/lab9/Lab09$ ./semctl
+Enter the semid: 131073
+
+Semaphore Commands
+GETVAL     =  1
+SETVAL     =  2
+GETPID     =  3
+GETNCNT    =  4
+GETZCNT    =  5
+GETALL     =  6
+SETALL     =  7
+IPC_STAT   =  8
+IPC_SET    =  9
+IPC_RMID   = 10
+Enter the desired command number: 2
+
+semid=131073  cmd=2
+
+
+Enter the semnum= 0
+Enter the value: 1
+issued semctl(semid=131073,semnum=0,SETVAL,semun.val=1)
+
+Semctl was successful using semid=131073
+]0;jason@Jason-linux: ~/Documents/CS507_UnixProgramming/lab9/Lab09jason@Jason-linux:~/Documents/CS507_UnixProgramming/lab9/Lab09$ ./semop
+Enter the semid of the semaphore set to be operated upon: 131073
+Enter the number of semaphore operations for this set: 2
+Operation 1:
+Enter the semaphore number (sem_num): 0
+you set sem_num to 0
+Enter +number to increment semaphore
+Enter -number to decrement semaphore
+Enter  zero   to test for zero
+Enter the operation for the semaphore (sem_op): z zero
+you set sem_op to 0
+Flags
+No flags                 0
+IPC_NOWAIT               1
+SEM_UNDO                 2
+IPC_NOWAIT and SEM_UNDO  3
+Enter number for desired flag(s): 0
+Operation 2:
+Enter the semaphore number (sem_num): ^C
+]0;jason@Jason-linux: ~/Documents/CS507_UnixProgramming/lab9/Lab09jason@Jason-linux:~/Documents/CS507_UnixProgramming/lab9/Lab09$ exit
+exit
+
+Script done on Fri 27 Mar 2015 09:11:02 PM EDT

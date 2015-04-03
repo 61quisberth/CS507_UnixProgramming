@@ -1,0 +1,6 @@
+after sending the signal 
+kill -s SIGPIPE 6526
+output: User defined signal 1
+mesg<sigusr1>
+
+

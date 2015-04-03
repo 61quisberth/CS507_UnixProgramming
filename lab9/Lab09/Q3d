@@ -1,0 +1,7 @@
+Modified line line 49 
+from:
+if(signal(SIGUSR1,handler_sigusr1) == SIG_ERR) 
+to:
+if(signal(SIGPIPE,handler_sigusr1) == SIG_ERR) 
+
+

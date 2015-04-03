@@ -1,0 +1,3 @@
+kill -s SIGUSR2 5253
+output: mesg<sigusr2 -- using sigsetjmp> (after sigsetjmp)
+

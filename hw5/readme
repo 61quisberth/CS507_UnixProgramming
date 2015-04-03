@@ -1,0 +1,30 @@
+some useful links for functions and topics related to hw5
+
+file locking tut 
+http://beej.us/guide/bgipc/output/html/multipage/flocking.html
+
+gnu resource on file locks 
+http://www.gnu.org/software/libc/manual/html_node/File-Locks.html
+
+basic file i/o from tutpoint
+http://www.tutorialspoint.com/cprogramming/c_file_io.htm
+
+link to hw 
+http://www.drchip.org/astronaut/cua/csc507/class05/hw05.pdf
+
+ftell()
+http://www.tutorialspoint.com/c_standard_library/c_function_ftell.htm
+
+fcntl()
+http://www.tutorialspoint.com/unix_system_calls/fcntl.htm
+
+fdopen()
+http://pubs.opengroup.org/onlinepubs/009695399/functions/fdopen.html
+
+check for lock use a while loop with fgets using a stream from fopen 
+just use write lock check 
+
+test file is simply two lines 
+
+w bgn 5 (offset) 5(how many bytes do you want from there on)
+

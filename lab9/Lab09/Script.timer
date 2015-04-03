@@ -1,0 +1,8 @@
+Script started on Fri 27 Mar 2015 08:16:51 PM EDT
+]0;jason@Jason-linux: ~/Documents/CS507_UnixProgramming/hw7/Examplesjason@Jason-linux:~/Documents/CS507_UnixProgramming/hw7/Examples$ ./timer
+setitimer for 5 seconds
+alarm arrived: mesg<SIGALRM>
+]0;jason@Jason-linux: ~/Documents/CS507_UnixProgramming/hw7/Examplesjason@Jason-linux:~/Documents/CS507_UnixProgramming/hw7/Examples$ exit
+exit
+
+Script done on Fri 27 Mar 2015 08:17:07 PM EDT

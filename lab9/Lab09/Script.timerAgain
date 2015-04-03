@@ -1,0 +1,6 @@
+Script started on Fri 27 Mar 2015 08:19:55 PM EDT
+]0;jason@Jason-linux: ~/Documents/CS507_UnixProgramming/lab9/Lab09jason@Jason-linux:~/Documents/CS507_UnixProgramming/lab9/Lab09$ ./timer
+setitimer for 2 seconds
+alarm arrived
+]0;jason@Jason-linux: ~/Documents/CS507_UnixProgramming/lab9/Lab09jason@Jason-linux:~/Documents/CS507_UnixProgramming/lab9/Lab09$ exit
+Script done on Fri 27 Mar 2015 08:20:03 PM EDT

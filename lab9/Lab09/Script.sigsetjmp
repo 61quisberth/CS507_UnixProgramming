@@ -1,0 +1,12 @@
+Script started on Fri 27 Mar 2015 07:56:19 PM EDT
+]0;jason@Jason-linux: ~/Documents/CS507_UnixProgramming/hw7/Examplesjason@Jason-linux:~/Documents/CS507_UnixProgramming/hw7/Examples$ ./sigsetjmp
+setsetjmp/longsetjmp example  (pid#5946)
+..handles sigusr1
+..handles sigusr2 and does a siglongjmp()
+..use kill -s [SIGUSR1|SIGUSR2] 5946 to send signals
+mesg<sigusr1>
+mesg<sigusr2 -- using sigsetjmp> (after sigsetjmp)
+]0;jason@Jason-linux: ~/Documents/CS507_UnixProgramming/hw7/Examplesjason@Jason-linux:~/Documents/CS507_UnixProgramming/hw7/Examples$ ei[Kxit
+exit
+
+Script done on Fri 27 Mar 2015 07:56:58 PM EDT

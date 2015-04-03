@@ -1,0 +1,5 @@
+modified to wait for just two seconds
+
+setitimer for 2 seconds
+alarm arrived
+
