@@ -1,0 +1,1 @@
+SHM_LOCK puts a lock on that specific portion of shared memory. As a result, access is denied

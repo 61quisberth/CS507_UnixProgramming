@@ -1,0 +1,9 @@
+#!/bin/bash          
+
+STR="Hello World!"
+echo $STR   
+#echo $1 will be the first cmd line argument to be the pid
+
+for i in $( kill -l | grep SIG); do
+echo item: $i
+done

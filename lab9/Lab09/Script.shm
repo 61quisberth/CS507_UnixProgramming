@@ -1,0 +1,196 @@
+Script started on Thu 02 Apr 2015 09:47:12 PM EDT
+]0;jason@Jason-linux: ~/Documents/CS507_UnixProgramming/lab9/Lab09jason@Jason-linux:~/Documents/CS507_UnixProgramming/lab9/Lab09$ ./shmget
+Enter the desired key (in hex): 123
+
+Enter the operation permissions (in octal): 777
+
+Enter the corresponding number to set the desired flags
+No flags                     = 0
+IPC_CREAT                    = 1
+IPC_EXCL                     = 2
+IPC_CREAT and IPC_EXCL       = 3
+   Enter Flags               : 3
+
+key=0x123  opperm=0777  flags=03
+
+Enter the segment size (in bytes): 1000
+
+The shmid is 10813457
+]0;jason@Jason-linux: ~/Documents/CS507_UnixProgramming/lab9/Lab09jason@Jason-linux:~/Documents/CS507_UnixProgramming/lab9/Lab09$ ./shmop
+Enter the shmid of the shared memory segment to be operated on: 10813457
+
+Enter the value for the shared memory address shmaddr (in hex): 0
+The desired address is 0x(nil)
+
+Enter the corresponding # for the desired flags
+SHM_RND                = 1
+SHM_RDONLY             = 2
+SHM_RND and SHM_RDONLY = 3
+  Enter flag #         : 3
+
+Flags= 030000 = SHM_RND SHM_RDONLY
+
+Shmat was successful: shmid=10813457, address=0x0x7f09e75a3000
+Enter string to enter into shared memory or enter "?" for query
+This is a test
+copying buf<This is a test> into shared memory:
+Segmentation fault (core dumped)
+]0;jason@Jason-linux: ~/Documents/CS507_UnixProgramming/lab9/Lab09jason@Jason-linux:~/Documents/CS507_UnixProgramming/lab9/Lab09$ ./shmop
+Enter the shmid of the shared memory segment to be operated on: 10813457
+
+Enter the value for the shared memory address shmaddr (in hex): 0 0x0x7f09e75a3000
+The desired address is 0x(nil)
+
+Enter the corresponding # for the desired flags
+SHM_RND                = 1
+SHM_RDONLY             = 2
+SHM_RND and SHM_RDONLY = 3
+  Enter flag #         : 
+Flags= 020001630 =
+
+Shmat was successful: shmid=10813457, address=0x0x7f77aa63e000
+Enter string to enter into shared memory or enter "?" for query
+This is a test
+copying buf<This is a test> into shared memory:
+stored: shmaddr=0x7f77aa63e000xx<This is a test>
+Now detaching from shared memory...
+
+Shmdt was successful for address 0x0x7f77aa63e000
+]0;jason@Jason-linux: ~/Documents/CS507_UnixProgramming/lab9/Lab09jason@Jason-linux:~/Documents/CS507_UnixProgramming/lab9/Lab09$ ./shmop
+Enter the shmid of the shared memory segment to be operated on: 10813457
+
+Enter the value for the shared memory address shmaddr (in hex): 0x07 x7f77aa63e000
+The desired address is 0x(nil)
+
+Enter the corresponding # for the desired flags
+SHM_RND                = 1
+SHM_RDONLY             = 2
+SHM_RND and SHM_RDONLY = 3
+  Enter flag #         : 
+Flags= 020001630 =
+
+Shmat was successful: shmid=10813457, address=0x0x7fbbdae4b000
+Enter string to enter into shared memory or enter "?" for query
+?
+displaying what's in shared memory:
+at 0x0x7fbbdae4b000x<This is a test>
+Now detaching from shared memory...
+
+Shmdt was successful for address 0x0x7fbbdae4b000
+]0;jason@Jason-linux: ~/Documents/CS507_UnixProgramming/lab9/Lab09jason@Jason-linux:~/Documents/CS507_UnixProgramming/lab9/Lab09$ ./shmctl
+Enter the shmid: 10813457
+Available shared memory control operations
+IPC_STAT       = 1
+IPC_SET        = 2
+IPC_RMID       = 3
+IPC_LOCK       = 4
+IPC_UNLOCK     = 5
+  Enter desired shmctl operation: 1
+in summary: shmid#10813457  command=1
+
+The user ID                is 1000
+The group ID               is 1000
+The creator's ID           is 1000
+The creator's group ID     is 1000
+The operation permissions are 0777
+The segment size           is 1000
+The pid of last shmop      is 4467
+The pid of creator         is 4428
+The current # attached     is 0
+The last shmat time        is 1428025850
+The last shmdt time        is 1428025850
+The last change time       is 1428025648
+
+Shmctl was successful for shmid=10813457
+]0;jason@Jason-linux: ~/Documents/CS507_UnixProgramming/lab9/Lab09jason@Jason-linux:~/Documents/CS507_UnixProgramming/lab9/Lab09$ ./shmctl
+Enter the shmid: 10813457
+Available shared memory control operations
+IPC_STAT       = 1
+IPC_SET        = 2
+IPC_RMID       = 3
+IPC_LOCK       = 4
+IPC_UNLOCK     = 5
+  Enter desired shmctl operation: 4
+in summary: shmid#10813457  command=4
+
+Shmctl was successful for shmid=10813457
+]0;jason@Jason-linux: ~/Documents/CS507_UnixProgramming/lab9/Lab09jason@Jason-linux:~/Documents/CS507_UnixProgramming/lab9/Lab09$ ./shmop
+Enter the shmid of the shared memory segment to be operated on: 10813457
+
+Enter the value for the shared memory address shmaddr (in hex): 0x0x7fbbdae           0x0x7fbbdae4b000
+The desired address is 0x(nil)
+
+Enter the corresponding # for the desired flags
+SHM_RND                = 1
+SHM_RDONLY             = 2
+SHM_RND and SHM_RDONLY = 3
+  Enter flag #         : 
+Flags= 020001630 =
+
+Shmat was successful: shmid=10813457, address=0x0x7f8102142000
+Enter string to enter into shared memory or enter "?" for query
+?
+displaying what's in shared memory:
+at 0x0x7f8102142000x<This is a test>
+Now detaching from shared memory...
+
+Shmdt was successful for address 0x0x7f8102142000
+]0;jason@Jason-linux: ~/Documents/CS507_UnixProgramming/lab9/Lab09jason@Jason-linux:~/Documents/CS507_UnixProgramming/lab9/Lab09$ ./shmop
+Enter the shmid of the shared memory segment to be operated on: 10813457
+
+Enter the value for the shared memory address shmaddr (in hex): 0x0x7f77aa63e000
+The desired address is 0x(nil)
+
+Enter the corresponding # for the desired flags
+SHM_RND                = 1
+SHM_RDONLY             = 2
+SHM_RND and SHM_RDONLY = 3
+  Enter flag #         : 
+Flags= 020001630 =
+
+Shmat was successful: shmid=10813457, address=0x0x7f72bd98f000
+Enter string to enter into shared memory or enter "?" for query
+> ?
+displaying what's in shared memory:
+at 0x0x7f72bd98f000x<This is a test>
+Now detaching from shared memory...
+
+Shmdt was successful for address 0x0x7f72bd98f000
+]0;jason@Jason-linux: ~/Documents/CS507_UnixProgramming/lab9/Lab09jason@Jason-linux:~/Documents/CS507_UnixProgramming/lab9/Lab09$ ./shmctl
+Enter the shmid: 10813457
+Available shared memory control operations
+IPC_STAT       = 1
+IPC_SET        = 2
+IPC_RMID       = 3
+IPC_LOCK       = 4
+IPC_UNLOCK     = 5
+  Enter desired shmctl operation: 3
+in summary: shmid#10813457  command=3
+
+Shmctl was successful for shmid=10813457
+]0;jason@Jason-linux: ~/Documents/CS507_UnixProgramming/lab9/Lab09jason@Jason-linux:~/Documents/CS507_UnixProgramming/lab9/Lab09$ ipcs -m
+
+------ Shared Memory Segments --------
+key        shmid      owner      perms      bytes      nattch     status      
+0x00000000 1114112    jason      600        524288     2          dest         
+0x00000000 393217     jason      600        524288     2          dest         
+0x00000000 425986     jason      600        524288     2          dest         
+0x00000000 622595     jason      600        524288     2          dest         
+0x00000000 655364     jason      600        16777216   2                       
+0x00000000 917509     jason      600        33554432   2          dest         
+0x00000000 851974     jason      600        524288     2          dest         
+0x00000000 1015815    jason      600        524288     2          dest         
+0x00000000 1179656    jason      600        2097152    2          dest         
+0x00000000 1343497    jason      600        524288     2          dest         
+0x00000000 1441802    jason      600        524288     2          dest         
+0x00000000 10158091   jason      600        524288     2          dest         
+0x00000000 1507340    jason      600        393216     2          dest         
+0x00000000 1605645    jason      600        524288     2          dest         
+0x00000000 10190862   jason      600        4194304    2          dest         
+0x00000000 10223631   jason      600        33554432   2          dest         
+0x00000000 10059792   jason      600        2097152    2          dest         
+
+]0;jason@Jason-linux: ~/Documents/CS507_UnixProgramming/lab9/Lab09jason@Jason-linux:~/Documents/CS507_UnixProgramming/lab9/Lab09$ exit
+exit
+
+Script done on Thu 02 Apr 2015 09:55:02 PM EDT
