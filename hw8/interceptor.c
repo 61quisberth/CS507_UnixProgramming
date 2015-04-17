@@ -1,3 +1,4 @@
+// CS 507 Jason Quisberth hw 8
 #include <stdio.h>
 #include <signal.h>
 #include <string.h>   /* for memset */
@@ -26,9 +27,8 @@ int main(void)
 
 	printf("Send signalt to pid: %d or type 'quit' to exit.\n", getpid());
 
-	while (!done)
-	{
-		gets(str);
+	while (!done){
+		fgets(str,4,stdin);
 		if(strcmp(strExit,str) == 0)
 			done = 1;
 	}

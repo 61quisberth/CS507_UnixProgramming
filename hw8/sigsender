@@ -1,9 +1,13 @@
 #!/bin/bash          
+# Jason Quisberth hw 8 cs507
 
-STR="Hello World!"
-echo $STR   
-#echo $1 will be the first cmd line argument to be the pid
+# to use: ./sigsender some_PID 
+# echo $1 will be the first cmd line argument to be the pid
 
-for i in $( kill -l | grep SIG); do
-echo item: $i
+for i in `seq 1 50`;
+do
+	if [ $i -ne 9 ]; 
+	then
+		kill -$i $1
+	fi
 done
