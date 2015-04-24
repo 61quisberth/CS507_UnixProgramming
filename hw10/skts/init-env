@@ -1,0 +1,9 @@
+#! /bin/bash
+# to use: source init-env
+
+#export ILIST="-I/home/jason/Documents/CS507_UnixProgramming/drchipdbg -I/home/jason/Documents/CS507_UnixProgramming/ssl/HDR"
+export ILIST="-I/home/jason/Documents/CS507_UnixProgramming/drchipdbg -I/home/jason/Documents/CS507_UnixProgramming/ssl/ -I/home/jason/Documents/CS507_UnixProgramming/ssl/HDR"
+export LLIST="/home/jason/Documents/CS507_UnixProgramming/drchipdbg/xtdio.a /home/jason/Documents/CS507_UnixProgramming/ssl/HDR/sockets.h /home/jason/Documents/CS507_UnixProgramming/drchipdbg/xtdio.h /home/jason/Documents/CS507_UnixProgramming/ssl/simpleskts.a"
+#/home/jason/Documents/CS507_UnixProgramming/ssl
+#/home/jason/Documents/CS507_UnixProgramming/ssl/HDR
+#/home/jason/Documents/CS507_UnixProgramming/ssl/HDR/sockets.h
