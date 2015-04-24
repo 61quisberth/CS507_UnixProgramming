@@ -1,0 +1,4 @@
+#! /bin/bash
+
+ln -s memmapC memmapA 
+ln -s memmapC memmapB 

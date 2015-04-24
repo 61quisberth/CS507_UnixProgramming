@@ -1,0 +1,8 @@
+on using the programs associated with hw9 CS509
+make to build executables 
+./makelink -- creates two synbolic links memmapA and memmapB
+./memmapC set -- creates semaphore 
+./memmapC unset -- deletes semaphore given semid
+./memmapC memset -- creates memory mapped file
+make clean -- removes links and executables 
+
