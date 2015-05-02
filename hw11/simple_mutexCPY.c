@@ -17,16 +17,16 @@ int main(int argc, char **argv){
 
 	// inputs: ptr to buffer, ptr to thread attribute (NULL=default), ptr to routine thread to execute, ptr to parameter to be pased at which new thread starts
 	pthread_create(&thread1, 
-		NULL, (void *) do_one_thing, (void *) &r1);
+			NULL, (void *) do_one_thing, (void *) &r1);
 
 	pthread_create(&thread2, 
-		NULL, (void *) do_another_thing, (void *) &r2);
+			NULL, (void *) do_another_thing, (void *) &r2);
 
 	// wait for thread termination
 	pthread_join(thread1, NULL);
 	pthread_join(thread2, NULL);
 
-	do_wrap_up(r1,r2);
+
 	return 0;
 }
 
@@ -43,6 +43,8 @@ void do_one_thing(int *pnum_times){
 	else{
 		x = 1;
 	}
+	// unlock mutex
+	pthread_mutex_unlock(&r3_mutex);
 
 	for(i = 0; i < 4; i++){
 		printf("do one thing\n");
@@ -50,8 +52,6 @@ void do_one_thing(int *pnum_times){
 			x = x + i;
 		(*pnum_times)++;
 	}
-	// unlock mutex
-	pthread_mutex_unlock(&r3_mutex);
 }
 
 void do_another_thing(int *pnum_times){
@@ -77,10 +77,3 @@ void do_another_thing(int *pnum_times){
 	}
 }
 
-void do_wrap_up(int one_times, int another_times){
-	int total;
-
-	total = one_times + another_times;
-	printf("wrap up: one thing %d, another %d, total %d\n",
-			one_times, another_times, total);
-}
