@@ -1,0 +1,14 @@
+#! /bin/bash
+#   bashmultiprompt: this script issues a request for
+#   two items on one line
+echo "Enter first name: \c"
+tput sc
+echo "                  Enter last name: \c"
+tput rc
+read var1
+tput rc
+tput cuu1
+tput cuf 35
+read var2
+echo "var1<"$var1">"
+echo "var2<"$var2">"

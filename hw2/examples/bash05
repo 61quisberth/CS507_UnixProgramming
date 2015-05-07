@@ -1,0 +1,7 @@
+#! /bin/bash
+#  Echo some special variables: $* and $@
+#  Echo (up to) three command line arguments
+echo '$*<'$*">"
+echo '$@<'$@">"
+shift
+echo "1<"$1">" "2<"$2">" "3<"$3">"

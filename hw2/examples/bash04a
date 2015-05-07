@@ -1,0 +1,16 @@
+#! /bin/bash
+# Using typeset -a to initialize an array
+#
+# Echoes shell, two random numbers, and
+# sets up card[], an array of two strings
+
+echo $SHELL
+RANDOM=$$
+echo $RANDOM
+echo $RANDOM
+
+typeset -a card
+card[0]="one"
+card[1]="two"
+echo card[0]'<'${card[0]}'>'
+echo card[1]'<'${card[1]}'>'

@@ -1,0 +1,155 @@
+final review for CS507 advanced unix systems programming 
+
+----ch1----- 
+file descriptors:
+0-stdin,1-stdout,2-stderr
+4 = read, 2 = write, 1 = execute
+chmod 644 myfile
+(change permissions to read-write for myself and read-only for my group and others)
+6 = 4 + 2: user has read and write
+4 = 4: group has read only
+4 = 4: others have read only
+
+pipes |  - output from left goes to right with concurrent commands
+
+IO direction
+>file stdout output to file
+>>file stdout appends to file
+<file stdin use file contents as input
+2>file stderr error output to file
+2>>file stderr error output appended to file
+2>&1 stderr error output redirected to stdout
+
+quoting
+'' avoids any expansion of characters inside the single quotes
+"" double quotes remove magic, except from $
+'' will run the command in the backquotes (BACKTICKS)
+
+env vars -> export -> remove -> unset
+
+string1 = string2 compare two strings for equality
+
+shell loops 
+if, then, elif, then elif, then, else, fi
+while, do, done
+until,do, done
+for,do,done
+
+typeset -u arrayname make an array
+arrayname[int]= assign to an array
+${arrayname[int]} access an array
+----ch2----- 
+c programming - definition is a declaration and memory assignment
+c ptrs are declared with type  
+ *ptr  
+int a = 2
+ptr = &a
+printf("%d",*ptr) // prints out value of p which is value of a
+
+int (*pf)(float);
+^ is a ponter to a function that takes a float as input and outputs int
+
+unions are like structures except they have overlapping mem addresses
+
+c switch cases are always ints
+
+command line args
+gcc -o myprog myprog.c
+argv[0] = gcc
+argv[1] = -o  
+argv[2] = myprog
+argv[3] = myprog.c
+
+function calls allocate stack memmory, allocs allocate heap memmory 
+
+Symbolic Debugger: a program which allows one to debug another program's
+performance by providing access to its variables and control over instruction execution.
+core dump: these generally occur because a program attempts to access memory it
+doesn't own.
+
+---ch 3 ----
+type of files in unix
+regular			text,binary, executables
+directory		files names and where-to-find info (inode****)
+link			hard links
+character devices	for physical devices that send data byte by byte
+block devices		for physical devices that send data in block
+sockets			interprocess communication
+pipes			interprocess communication
+
+boot blocks
+--------
+appear at the beg of every file system
+contain boostrap code to initialize operating system
+super block - contains metadata on filesystem
+data blocks are typically 512 bytes
+superblocks contain array of free i-node indices 
+
+tables used in unix
+----
+file table - tracks next read/write on file (file descriptors)
+user file descriptio table - (kernel) holds indices of file desciptors in which every file feature a kernel level entry into this
+i-node table - describe file permissions and indices assocaited with data blocks
+
+I-nodes contain: file type, file access permission, size of file, pointers to data
+blocks for the file, etc
+it is a datastrucure for a file system object
+each inode contains 12 slots for direct indexing and then up to triple indexing is permitted using indirect indexing 
+
+hard link - new entry in a directory having the same i-node the target has
+only one copy of files content on disk hard links are just directory entries
+a file and directory may now be called by different names and paths 
+this increment inodes link count
+
+symbolic link - file that contains the path which can refernce another file in a file system
+to make -> ln -s realfilenamepath fakefilepath filename
+character device - for physical devices that send byte by byte
+two numbers - major and minor device number 
+major-index to a kernel table of all device driver functions known to the system
+minor-data passed on to the device driver, the driver can use this to modify its behavior 
+
+fstab to mount fiel systems 
+
+FIFO files - named pipes, provide a buffer for one process to write into and for another to take as input 
+
+both processes need to have opened a FIFO file (one read and one write) before data goes through
+
+mkfifo -path-to-file-
+to remove use rm
+
+unix commands are issued by the shell 
+system calls are functions invoked interally by a program 
+
+what happens when you open a file
+kernel searches process' file descriptor table for an unused spot
+kernel examples its own file table for an unused spot for its reference 
+	if found, file descriptor points to kernel slot 
+	file entry points to inode table
+	file entry gets current file ptr of open file 
+	file table entry gets type of file to open (r,w,both)
+	ref count in file talbe entry set to 1 
+	ref count of inode is increased by one 
+
+what happens when you close a file 
+kernel sets file descriptor to unused 
+decrements file table entry by 1 
+process' file table entry set to unused 
+ref count in inode decraesed by 1 
+if hard link cnt of inode != 0 then success 
+make inode table entry as unused and deallocate disk space 
+return 0 
+
+whats inode anyway?
+filetype: regular,dir,char dev,block dev,local socket,named pipe,symlink
+access: permission owner,group,other file access
+hard link: count qty hard links to this file
+user id: file's user identifier
+group id: file's group identifier
+file size: in bytes
+last access time :last access time, in seconds since 00:00 UTC, Jan 1, 1970
+last modified time: last modified time, in seconds since 00:00 UTC, Jan 1, 1970
+last change time: file access, uid, gid, hard link changed
+* inode number system inode of file, in the directory file
+* file system id which filesystem its on
+* major/minor dev # device files only
+---ch 4 ---

@@ -1,0 +1,11 @@
+#! /bin/bash
+
+echo "whatdaya want, bud?" 
+response=$(line)
+echo "response was <$response>"
+
+if test $response = "beer"; then
+	echo "Hey, Joe -- he wants beer\!";
+else
+	echo "We don't serve that stuff here, tud";
+	fi

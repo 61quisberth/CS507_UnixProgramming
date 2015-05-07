@@ -1,0 +1,16 @@
+#! /bin/bash -x
+# Using typeset to set up an array  AND using -x option
+echo $SHELL
+
+echo "Here comes two random numbers"
+RANDOM=$$
+echo $RANDOM
+echo $RANDOM
+
+echo ""
+echo "Set up card as an array, init [0] and [1], and echo"
+typeset card
+card[0]="one"
+card[1]="two"
+echo card[0]'<'${card[0]}'>'
+echo card[1]'<'${card[1]}'>'

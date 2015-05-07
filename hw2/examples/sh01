@@ -1,0 +1,10 @@
+#! /bin/ksh
+# This is a comment; they go from the "#" to end-of-line
+
+# sh01: Environment Variables
+x="abc"        # x is a local variable
+integer i      # i is now a local integer variable
+i=2            # is now has the value of 2
+
+echo "x="$x
+echo "i="$i

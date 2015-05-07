@@ -1,0 +1,42 @@
+#! /bin/ksh
+# sh03: Conditional Commands
+#  Usage:  sh03 {abc|def|...} {abc|def|...} [#]
+
+# if:
+if [[ "$1" = "abc" ]]; then
+	echo "First shell argument is abc"
+elif [[ "$1" = "def" ]]; then
+	echo "First shell argument is def"
+else
+	echo "First shell argument is neither \"abc\" nor \"def\""
+	fi
+
+# case:
+case "$2" in
+
+abc|def)	echo "This case has determined that your 2nd shell arg is \"abc\" or \"def\""
+			;;
+*)			echo "This case doesn't know about \"$2\""
+			;;
+esac
+
+# while and until
+if [[ "$3" != "" ]]; then
+	integer i
+	integer j
+	i=$3
+
+	echo "will attempt while loop $i times:"
+	j=0
+	while [[ $j < $i ]]; do
+		echo "while: \$j is $j"
+		j=$j+1
+		done
+
+	echo "will attempt until loop" $(($i+1)) "times:"
+	j=0
+	until [[ $j > $i ]]; do
+		echo "until: \$j is $j"
+		j=$j+1
+		done
+	fi
