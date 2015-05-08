@@ -1,0 +1,11 @@
+#! /bin/bash
+
+echo '$#='${#}
+echo '$@='${@}
+typeset -i i
+i=0
+
+for file in $* ; do
+	i=i+1
+	echo '$'${i}'='${file}
+	done

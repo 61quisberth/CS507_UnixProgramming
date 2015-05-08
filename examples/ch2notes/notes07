@@ -1,0 +1,92 @@
+Memory Handling 
+
+    C supports recursion; that is, a function can call itself.
+
+    Problem 1: write a function to compute factorials using recursion
+
+    The memory so used comes from the "stack"; function calls, their
+    arguments, and their local values are "pushed" onto a stack.  The
+    function pops its pointer and arguments off the stack, does whatever it
+    does, then, if it returns a value, pushes that value onto the stack.
+
+    Another section of memory holds your global and static variables.
+
+    Finally, yet another section of memory, the "heap", holds memory
+    that your program may allocate and de-allocate as its running.
+
+        #include <stdlib.h>
+        void *malloc(size_t size);
+        void free(void *ptr);
+        void *realloc(void *ptr,size_t size);
+        void *calloc(size_t nelem,size_t elsize);
+
+    The malloc function allocates a chunk of memory of the given size.
+
+    ex.  char *s;
+         s= (char *) malloc((size_t) 10);
+         strcpy(s,"abc");
+
+         will allocate ten bytes (so it can hold a string of 9 chars
+         plus a null byte), and initialize it with the four bytes
+         'a', 'b', 'c', and null-byte (zero).
+
+    free() will free memory allocated by malloc, realloc, or calloc;
+    just pass a pointer to the memory to the function.
+
+    ex.  free(s);
+
+    calloc() takes "nelem", the number of elements, each of size
+    "size", and thus allocates nelem*size bytes.
+
+    ex.  struct ABC_str {
+             double d;
+             float  f;
+             struct ABC_str *prv;
+             struct ABC_str *nxt;
+             } *abc;
+         abc= (struct ABC_str *) calloc((size_t) 10,sizeof(struct ABC_str));
+
+    Note how, in the example above, the sizeof() macro is used to compute the
+    size of a structure so that the programmer need not do so him/herself.
+
+
+Problem 2:
+
+    Write a program which will save an arbitrary number of strings and
+    write them out in reverse order.  Assume no string is greater than
+    5000 bytes long.
+
+    Hints:
+        #define BUFSIZE 5001
+        FILE *fp;
+        char *b;
+        struct Save_str {
+            char *b;
+            struct Save_str *nxt;
+            struct Save_str *prv;
+            } *svhd= NULL, *svtl= NULL;
+
+        fp= fopen("filename","r");
+        while(fgets(buf,BUFSIZE,fp)) {}
+        save   = (struct Save_str *) malloc(sizeof(struct Save_str));
+        save->b= calloc(strlen(buf)+1,sizeof(char));
+        strcpy(save->b,buf);
+
+        Save strings in a double-linked list.
+
+                   svhd --+                                           svtl --+
+                          |                                                  |
+                          v                                                  v
+
+                +-------------------+  +-------------------+     +-------------------+
+                |              nxt->|  |              nxt->|     |              nxt->|
+          NULL  |      Save_str     |  |      Save_str     | ... |      Save_str     | NULL
+                |<--prv             |  |<--prv             |     |<--prv             |
+                +-------------------+  +-------------------+     +-------------------+
+
+        Each Save_str points to the previous and next Save_str.  The first prv pointer
+        and the last nxt pointer point to NULL, thereby demarcating the beginning
+        and ending of the linked list.
+
+        svhd points to the first Save_str on the list.
+        svtl points to the last  Save_str on the list.

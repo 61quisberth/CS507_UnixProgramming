@@ -1,0 +1,6 @@
+#! /bin/ksh
+
+for file in $* ; do
+	cfile=$(basename ${file} "\.c").c
+	echo "	  kshloop'ing on ${cfile}"
+	done

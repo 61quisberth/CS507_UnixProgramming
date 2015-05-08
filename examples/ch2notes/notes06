@@ -1,0 +1,54 @@
+Functions
+
+    type function-name ( [argument[,argument...]] )
+    {
+    ..list-of-statements..
+    }
+
+    Every function has a type that it returns; if that return type is "void"
+    then the function doesn't really return anything.
+
+    To return values use the "return" statement:
+
+        return expr ;
+
+    Example: Every C program must have a "main()" function:
+	         (also, getting information from the command line)
+
+        int main(int argc,char **argv)
+        {
+        }
+
+        argc contains a count of arguments on the command line,
+             including the command (program name) itself.
+
+        argv is an array of strings
+            argv[0]      holds first string
+            argv[1]      holds second string
+            ...
+            argv[argc-1] holds last string
+            argv[argc]   is NULL (zero)
+
+	Example: computing sin(x)+cos(x)
+
+		#include <stdio.h>
+		#include <math.h>
+		double sinpcos(double x)
+		{
+			return sin(x) + cos(x);
+		}
+	
+	Example: using sinpcos(x):
+
+		double z;
+		z= sinpcos((3.14159265/180.)*30.)
+
+    Problems:
+        1) Write a program which prints out a list of the arguments
+           fed to it, plus a count thereof:
+               cnt: argument
+
+        2) Write a function which computes the factorial of an
+           integer.  Write a main() function which interprets
+           its arguments, one at a time, uses that function
+           to compute the factorial, then prints out each result.

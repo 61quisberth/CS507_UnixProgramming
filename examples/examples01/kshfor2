@@ -1,0 +1,10 @@
+#! /bin/ksh
+
+echo '$1<'"$1"'>'
+echo '$2<'"$2"'>'
+echo '$*<'"$*"'>'
+
+for ifile in "$*"
+do
+	print "${ifile}"
+done

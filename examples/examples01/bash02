@@ -1,0 +1,25 @@
+#! /bin/bash
+# bash02: Comparisons and Expression Primitives
+
+if [[ "abc" = "def" ]]; then
+   echo "that's weird #1"
+else
+	echo "abc is not def"
+fi
+
+if [[ "abc" != "ghi" ]]; then
+   echo "abc is not ghi"
+else
+	echo "that's weird #2"
+fi
+
+if [[ "abc" = "abc" ]]; then
+   echo "on the other hand, abc is abc"
+else
+	echo "that's weird #3"
+fi
+
+myvar="abc"
+if [[ "$myvar" = "abc" ]]; then
+	echo "yes, myvar is \"abc\", too"
+fi

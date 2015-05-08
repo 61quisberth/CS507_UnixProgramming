@@ -1,0 +1,14 @@
+#! /bin/ksh
+
+echo "Let's see, you've said "$#" things..."
+
+while [[ $# -ge 1 ]]; do
+	if [[ "$1" = "abc" ]]; then
+		echo "You said abc!"
+	elif [[ "$1" = "def" ]]; then
+		echo "You said def!"
+	else
+		echo "you said something else: <"$1">"
+		fi
+	shift
+	done

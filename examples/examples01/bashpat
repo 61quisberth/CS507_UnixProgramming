@@ -1,0 +1,14 @@
+#! /bin/bash
+
+tstpat="abcabcdefghighi"
+
+tstpat1=${tstpat#+(abc)}
+tstpat2=${tstpat##+(abc)}
+tstpat3=${tstpat%+(ghi)}
+tstpat4=${tstpat%%+(ghi)}
+
+echo '                            tstpat  <'${tstpat}'>'
+echo 'remove small left  pattern: tstpat#    <'${tstpat1}'>'
+echo 'remove large left  pattern: tstpat##      <'${tstpat2}'>'
+echo 'remove small right pattern: tstpat% <'${tstpat3}'>'
+echo 'remove large right pattern: tstpat%%<'${tstpat4}'>'

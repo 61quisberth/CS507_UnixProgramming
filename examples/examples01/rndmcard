@@ -1,0 +1,13 @@
+#! /bin/bash
+typeset -i i=0
+typeset card
+RANDOM=$$
+# initialize the card array
+for suit in clubs diamonds hearts spades; do
+  for n in ace 2 3 4 5 6 7 8 9 10 jack queen king ; do
+  card[i]="$n of $suit"
+  i=i+1
+  done
+done
+# print a random card from the deck
+echo ${card[RANDOM%52]}

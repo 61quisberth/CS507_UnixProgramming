@@ -1,0 +1,45 @@
+Q2. Compiled for Q2:
+   cc -O3 ${ILIST} -DQ2 connection.c ${LLIST} -o connection
+
+   This command sets up a Q2 #define; thus connection is compiled to support Q2:
+
+      connection s port "message1" "message2" "message3" ...
+	  connection c port
+
+Q3. Compiled for Q3:
+   cc -O3 ${ILIST} connection.c ${LLIST} -o connection
+
+   This command compiles connection to support Q3:
+
+      connection s port pktsiz pktqty
+	  time connection c port
+
+                        client   client   client
+	Result:             real     user     sys
+		pktsiz  pktqty  time     time     time
+		    2   10000   0m0.04s  0m0.01s  0m0.01s
+	     1001   10000   0m0.03s  0m0.01s  0m0.01s
+
+		Obviously 10000 packets isn't really enough to get anything signficant out.
+		So, I repeated this experiment with 1000000 packets:
+
+                          client   client   client
+	Result:               real     user     sys       time/packet
+		pktsiz  pktqty    time     time     time      (using real time)
+		    2   1000000   0m1.57s  0m0.04s  0m0.50s    1.57usec
+	     1001   1000000   0m2.07s  0m0.05s  0m0.97s    2.07usec
+
+Q4. This one is a little tricky; largely because sending proceeds without waiting for a receiver.
+    My solution for that:
+	* the sender has a sleep(1) in it
+	* use two windows.  Window#1 runs   packet s 12347 2 1000000
+	                    Window#2 runs   time packet r 12347
+
+                          rcvr     rcvr     rcvr
+	Result:               real     user     sys       time/packet
+		pktsiz  pktqty    time     time     time      (using real time)
+		    2   1000000   0m3.38s  0m0.27s  0m1.93s    3.3usec
+	     1001   1000000   0m3.32s  0m0.91s  0m1.36s    3.2usec
+	
+	This experiment required re-running several times, as apparently packets would
+	be dropped, and the receiver would hang waiting for additional packets.

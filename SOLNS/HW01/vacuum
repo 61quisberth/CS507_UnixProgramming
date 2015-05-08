@@ -1,0 +1,64 @@
+#! /bin/bash
+#  Author: Charles E. Campbell, Jr.
+typeset    goleft
+typeset    goright
+typeset -i cnt
+typeset -i lcnt
+typeset -i rcnt
+
+# initialize
+cnt=0
+while (( cnt <= 76 )); do
+
+	# build the right-going vacuum cleaner strings
+	rcnt=0
+	goright[${cnt}]=""
+	while (( rcnt < cnt )); do
+		goright[cnt]=" ${goright[cnt]}"
+		rcnt=rcnt+1
+	done
+	goright[cnt]="${goright[cnt]}\==<"
+#	echo "goright[${cnt}][{${goright[${cnt}]}}"
+
+	# build the left-going vacuum cleaner strings
+	lcnt=76-cnt
+	goleft[${cnt}]='>==/'
+	while (( lcnt >= 0 )); do
+		goleft[cnt]=" ${goleft[cnt]}"
+		lcnt=lcnt-1
+	done
+#	echo "goleft [${cnt}][{${goleft[${cnt}]}}"
+
+	cnt=cnt+1
+done
+
+# go down the page
+typeset -i line
+typeset -i maxline
+line=0
+dir="right"
+maxline=${1:-25}
+cnt=76
+while (( line < maxline )); do
+    if [[ "${dir}" = "right" ]]; then
+        rcnt=0
+        while (( rcnt < cnt )); do
+            echo "[K${goright[${rcnt}]}[A"
+			msleep 10
+            rcnt=rcnt+1
+        done
+        dir="left"
+    else
+        lcnt=0
+        while (( lcnt < cnt )); do
+            echo "[K${goleft[${lcnt}]}[A"
+			msleep 10
+            lcnt=lcnt+1
+        done
+        dir="right"
+    fi
+	echo "[K[A"
+	echo ""
+    line=line+1
+done
+echo "[K\==< o*8o BURP! o.8o"

@@ -1,0 +1,20 @@
+#! /bin/ksh
+# Using typeset -u to set up an array
+# Note that -u changes all lower case characters to upper case characters
+# Opposite: -l
+echo $SHELL
+
+echo "Here comes two random numbers"
+RANDOM=$$
+echo $RANDOM
+echo $RANDOM
+
+echo ""
+echo "Set up card as an array"
+echo "initializes card[0] and card[1],"
+echo "and then displays their contents"
+typeset -u card
+card[0]="one"
+card[1]="two"
+echo card[0]'<'${card[0]}'>'
+echo card[1]'<'${card[1]}'>'

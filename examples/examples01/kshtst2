@@ -1,0 +1,11 @@
+#! /bin/ksh
+
+echo '$#='${#}
+echo '$@='${@}
+integer i
+i=0
+
+for file in $* ; do
+	i=i+1
+	echo '$'${i}'='${file}
+	done

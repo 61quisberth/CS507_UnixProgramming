@@ -1,0 +1,29 @@
+Loops
+
+    C sports three types of loops:
+
+        while(expr) {                      executes while expression evaluates
+            ...                            to true (ie. not zero).
+            }
+
+        do {                               do the following statements and
+            ...                            continue doing them while the
+            } while(expr);                 expression evalutes to true.
+
+        for(initialize; test; update) {    initialize expression can do several
+            ...                            things  (ex. x=y=0, z=1), and will
+            }                              be executed once.  Then the test
+                                           expression is evaluated; if true,
+                                           the main body of the loop gets
+                                           executed.  Then, the update expression
+                                           (which can do several things) is executed
+                                           and then the test again.
+
+    In addition, one can use break to break out of one level of loops.
+
+    One may use "continue" to immediately jump to the (update), test, and body.
+
+Problems:
+    1) Write a program that computes 10! using a while() loop
+    2) Write a program that computes 10! using a do-while() loop
+    3) Write a program that computes 10! using a for() loop

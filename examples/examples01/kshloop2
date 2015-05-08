@@ -1,0 +1,10 @@
+#! /bin/ksh
+
+integer i
+
+i=0
+echo "start with i=${i}"
+while [[ i -lt 5 ]] ; do
+	echo "i=${i}"
+	i=i+1
+	done

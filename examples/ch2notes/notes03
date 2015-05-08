@@ -1,0 +1,74 @@
+Expressions
+
+    C has a rich complement of operators -- see your "Short C Primer"
+    handout, page 8, for a list.
+
+    Example: Bit shifting and bitwise-or'ing
+
+        /* bitrev.c: this function reverses bit sequence */
+        #include <stdio.h>
+
+        /* --------------------------------------------------------------------- */
+
+        /* bitrev: this function reverses the bit sequence of the input integer
+         *
+         *     Hex           Binary
+         *   0xAAAAAAAA : 1010101010101010
+         *   0x55555555 : 0101010101010101  Use to swap closest pairs of bits
+         *   0xCCCCCCCC : 1100110011001100
+         *   0x33333333 : 0011001100110011  Use to swap closest pairs of 2 bits
+         *   0xF0F0F0F0 : 1111000011110000
+         *   0x0F0F0F0F : 0000111100001111  Use to swap closest pairs of 4 bits
+         *                                      ... etc ...
+         */
+        unsigned long bitrev(unsigned long x)
+        {
+        /* Reverse the bits of x (32 total). */
+        x = ((x & 0xAAAAAAAA) >>  1) | ((x & 0x55555555) <<  1);    /* swapping pairs of  1 bit     */
+        x = ((x & 0xCCCCCCCC) >>  2) | ((x & 0x33333333) <<  2);    /* swapping pairs of  2 bits    */
+        x = ((x & 0xF0F0F0F0) >>  4) | ((x & 0x0F0F0F0F) <<  4);    /* swapping pairs of  4 bits    */
+        x = ((x & 0xFF00FF00) >>  8) | ((x & 0x00FF00FF) <<  8);    /* swapping pairs of  8 bits    */
+        x = ((x & 0xFFFF0000) >> 16) | ((x & 0x0000FFFF) << 16);    /* swapping pairs of 16 bits    */
+
+        return x;
+        }
+    
+    Example: Computing the secant of x
+        /* sec.c: secant (1/cos) */
+        #include <stdio.h>
+        #include <math.h>
+
+        /* --------------------------------------------------------------------- */
+
+        /* sec: returns the secant of x */
+        double sec(double x)
+        {
+        return 1./cos(x);
+        }
+
+        /* --------------------------------------------------------------------- */
+
+Problems
+    1) Write a short program that opens a file called <data>, reads it
+       with fscanf(fp,...), and computes the average.
+
+        Hints:
+            FILE *fp;
+            fp= fopen("filename","r");
+            ...
+            fscanf(fp,"%lf",&x);
+            ...
+
+    2) Write a short program that computes Einstein's famous
+       equality:  E=mc^2.
+
+        Hints:
+            c=2.9979246e+08 m / s
+            m in kg
+            E in Joules (kg m^2 / s^2)
+
+        Convert, into Joules:
+            1kg
+            1 electron mass (9.1093897e-31 kg)
+            1 proton mass   (1.6726231e-27 kg)
+            1 planckmass    (2.17671e-8 kg)
