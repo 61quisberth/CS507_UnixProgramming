@@ -78,7 +78,6 @@ sockets			interprocess communication
 pipes			interprocess communication
 
 boot blocks
---------
 appear at the beg of every file system
 contain boostrap code to initialize operating system
 super block - contains metadata on filesystem
@@ -86,7 +85,6 @@ data blocks are typically 512 bytes
 superblocks contain array of free i-node indices 
 
 tables used in unix
-----
 file table - tracks next read/write on file (file descriptors)
 user file descriptio table - (kernel) holds indices of file desciptors in which every file feature a kernel level entry into this
 i-node table - describe file permissions and indices assocaited with data blocks
@@ -95,6 +93,8 @@ I-nodes contain: file type, file access permission, size of file, pointers to da
 blocks for the file, etc
 it is a datastrucure for a file system object
 each inode contains 12 slots for direct indexing and then up to triple indexing is permitted using indirect indexing 
+
+errno - error codes short for ennor number 
 
 hard link - new entry in a directory having the same i-node the target has
 only one copy of files content on disk hard links are just directory entries
@@ -153,3 +153,505 @@ last change time: file access, uid, gid, hard link changed
 * file system id which filesystem its on
 * major/minor dev # device files only
 ---ch 4 ---
+umask - specifies permission bits to be masked off 
+used to set up default permissions 
+
+creat() equivalent function is open()
+
+opne access controls
+access
+O_RDONLY read only
+O_WRONLY write only 
+O_RDWR read and write 
+O_APPEND appending 
+O_CREAT create/open file
+O_EXCL|O_CREAT opens new file and fails if already exists
+O_TRUNC discards previous file contents 
+O_NONBLOCK sub read and write should not block
+O_NOCTTY dont use named termial device file as calling process' contrl terminal
+
+S_IRWXU read write, ex, user
+S_IRUSR read user
+S_IWUSR write user
+S_IXUSR execute usere
+S_IRGRP  read group
+S_IWGRP write group
+S_IXGRP exe group
+S_IROTH read other
+S_IWOTH write other
+S_IXOTH execute other
+
+lseek allows for writing past end of file 
+
+file status functions 
+stat - sttaus given path
+fstat - status given file descriptor 
+lstat - status of link
+
+file permissions are inherited by the user to the program 
+
+*sticky bit - prevents unprivileged users from removing or renaming a file in a directory, even though it is world-writable. The sticky bit is found, for example, on the /tmp directory.
+
+fcntl 
+F_GETFL returns current access control flags
+F_SETFL O_APPEND O_NONBLOCK O_NDELAY
+
+setuid permission bit set, then the file's owner's permissions are inherited by that program. The running program's effective user-id becomes that of the file's owner, not the user.
+
+setgid bit set, which means that the effective group-id
+becomes that of the file's group, rather than the user's group
+
+epoch time is since 00:00:00 jan 1,1970 UTC
+
+---lecture 05-----
+read lock
+prevents overlapping write locks and allows read locks by other processes
+
+write lock 
+prevents overlapping read and/or write locks  (exclusive locking)
+
+advisory locks are not enforced but can be checked by other proecesses
+you can lock down to byte level 
+
+ upon process termination all file locks are released (for that process) child processes do not inherit file locks
+flock(): applies or removes advisory locks given a file descriptor
+
+how advisory locking works 
+try to set to lock, if lock is acquired, read/write as desired, then release the lock 
+
+fcntl() sets a lock 
+F_SETLK sets locks, but does not block
+F_SETLKW sets lock and blocks until lock is acquired
+F_GETLK lock query what process holds the locked file
+
+lock promotion - handling overlapping locks (read -> write, write
+
+Mandatory locks: (kernel enforced) other processes cannot access file
+
+Deadlock when two or more processes are each waiting for a resource that the other
+has locked
+
+mkfifo creates named pipe while pipe creates anonymoous
+
+--lecture 06-----
+fifo's - client server communications 
+fifo's get one fifo per client but one one per server 
+
+dangling link- a sym link that pts to a non-existant file
+
+A process is an executing program (task); an execution context
+
+system memory is divided into user and kernel space 
+
+process memory has its own memory space and divided into three sets
+text, data, and stack 
+code, static variables, and reigster variables, auto variables, and function calls
+
+u-area - user area that holds open file tables, singal actions, accounting info, and system stack segment  
+
+process states
+user program: is executing in user mode
+kernel program: is executing in kernel mode
+ready to run, in memory: ready to run when scheduled by the kernel
+sleeping, in memory: unable to run until some event (typically, some signal) occurs.
+Process is in memory, but blocked.
+ready to run, swapped: process must be brought in from swap memory before kernel
+can schedule it for execution
+sleeping, swapped: process is blocked, awaiting some event, and has been transferred
+to swap memory. (blocked)
+preempted: Process was returning from kernel to user mode, but the kernel has
+preempted it, having scheduled another process
+created: Process is newly created (not yet ready to run)
+**zombie Process no longer exists, but a record of its termination status is available
+
+Unix defs:**
+session: a session is a group of processes identified by a common id called a session id.
+session leader: A session leader is the initial process of a session.
+controlling terminal: A controlling terminal is a terminal device that is associated
+with a session.
+controlling process: a session leader that has established a connection to a controlling
+terminal.
+process group: a group of processes that are handled together for job control purposes.
+foreground process group: each session that has established a connection with a
+controlling terminal specifies one process group of the session as the foreground
+process group
+background process: group any process group not the foreground process group of a
+session that is connected with a controlling terminal.
+process group leader: a process whose process id is the same as its process group id
+process group id: every active process is a member of a process group, and is
+identified by an integer (process group id).
+orphaned process group: a process group in which the parent of every member in the
+group is either itself a member of the group or is not a member of the process
+group's session.
+Process ID: each active process as an id
+process lifetime: begins when the process is originally forked and ends after it exits.
+process group lifetime: begins when the session is created by its session leader, and ends when:
+the last process that is a member of the session ends, or when
+the last process that is a member of the session leaves by calling setsid().
+session lifetime: begins when the session is created by its session leader, and ends
+when:
+the last process that is a member of the session ends, or when
+the last process that is a member of the session leaves by calling setsid().
+saved user id/saved group: id the values of the effective user id and effective group id
+prior to exec()ing a file
+special processes: processes with pids of 0 or 1 are special processes
+superuser: a process is recognized as a superuser process if its effective user id is zero.
+
+querying process attribs:
+pid t getpid(void) get current process' pid
+pid t getppid(void) get parent process' pid
+pid t getpgrp(void) get process group id of a process
+uid t getuid(void) get real user id of process
+uid t geteuid(void) get effective user id of process (which determines file access
+privileges, controlled by setuid bit)
+gid t getgid(void) get real group id
+gid t getegid(void) get effective group id (determines file access privileges, setgid bit)
+
+Process Text:Executable machine-level instructions for the program
+Process Data: Data accessible by the process' program
+User Stack: Contains arguments, local variables, pointers for functions executing in
+user mode
+Shared Memory: Memory shared with other processes (interprocess communications)
+System-Level Context
+Process Table Entry: Defines the state of a process (always accessible to kernel)
+U (user) Area: Process control information that is accessible only in the context of the
+process
+Per Process Region Table: Defines the mapping from virtual to physical addresses, a
+permission field for type of accessed allowed: read-only, read-write, read-execute
+Kernel Stack: Contains the stack frame of kernel procedures for when the process
+executes in kernel mode
+
+ forked process (a child) has copies of the following from its parent process:
+real user id, profiling status text segment
+real group id, nice value (ie. priority) data segment
+effective user id, scheduler class stack segment
+effective group id attached shared memory segments file descriptor table
+environment process group id close-on-exec flag session id signal handling settings current working directory signal handling mask root directory supplementary group ids filemode creation mask set-user-id bit resource limits set-group-id bit controlling terminal 
+
+A child differs from its parent process:
+has unique pid has different ppid does not inherit file locks semadj values cleared
+does not inherit (process, text, data) locks does not inherit pending signals alarm time reset to zero
+
+fork use, >0 then its a parent, ==0 its a child, -1 its an error
+
+copy-on-write - when fork copies memory pages that either the child or parent want to modify
+
+fork()s can easily cause races - multiple processes trying to do something with
+shared resources simultaneously
+to prevent, use signals, semaphores, mutexes, file locks, or polling
+
+command pipes-coupling of pipe and dup2 in order to make the stdout or a parent to be the stdin of a child process 
+
+pipes are undirectional one may only specify reading or writing not both
+
+-- lecture 07 ----
+signals (asynch) are integers that interrupt processes, killing can cause core dumps
+
+SIGALRM alarm timer
+SIGINT user hit ctrl-c
+SIGKILL sure-kill. Cannot be stopped. Process will die!
+SIGQUIT process quit signal (ctrl-backslash)
+
+signal is pending when the process must handle it, but hasn't done so
+already.
+
+u-area handles signal handling specifications
+use sigaction to make these
+--- lecture 08 ----
+IPC - interprocess communications, messages, shared mem, mem mapping, and semaphores
+Message Queues-resource sep from programs that be written if no one is reading them (unlike pipes), and int
+Shared memory-sharing data along common memmory
+Mem mapping-like shared mem except commonality is a file, which si reusable
+Semaphore-like locks to coordinate access to resources 
+descriptors of these items are called ***KEYS**
+
+message flags 
+IPC PRIVATE(unique channel) IPC_CREAT(if dne, create new, if so return id) IPC_CREAT|IPC_EXCL(if dne, creat new, if so, return error)
+messaging -> int msgqid= msgget(-key-,IPC_CREAT|IPC_EXCL) (to create)
+int msgqid= msgget(-key-,IPC_CREAT) (to access)
+IPC_RMID (mbufp=NULL) if calling process was creator of MQ,
+        or has been granted privileges: destroys the MQ
+IPC_SET creator/grantee of privileges/superuser may grant
+       privileges to another process using mbuf.uid,
+      mbuf.gid, and mbuf.mode permissions.
+IPC_STAT copy MQ's current msqid_ds into *mbufp
+
+semaphores
+used to sync thread access 
+atomic-perform a test and set pair operations that cannot be interupted by kernel
+-interrupts are permitted between the test (if...) and the setting of the semaphore
+
+max num of sem sets=128, max num of sems per semid=250
+semaphore commands
+GETVAL value of semid:semnum semaphore
+SETVAL sets semid:semnum semaphore to val
+GETALL places semvals into array
+SETALL sets semaphores using array
+GETNCNT returns value of semncnt
+GETZCNT returns value of semzcnt (num of blocked processes)
+IPC_RMID remove (delete) semaphore set
+----lecture 09-----
+shared mem, no kernel copying and is fast
+two types, all-in-ram, and mem mapped to a file
+SHM_R SHM_W writable by owner
+SHM_R>> 3 readable by group
+SHM_W>> 3 writable by group
+SHM_R>> 6 readable by others
+SHM_W>> 6 writable by others
+IPC_CREAT  same a semaphores
+IPC_EXCL same as seamphores
+shmat() gives access to the shared memory pool
+with a fork, child shared memory access
+
+procudure with semaphores
+sops.sem_num= 0; // pick a semaphore
+sops.sem_op= -1; // attempt to decrement the semaphore
+sops.sem_flg= 0; // block if semaphore can't be decremented
+semop(semid,&sops,(size_t) 1); // "obtain" the semaphore
+shmpool->str1.whatever= whatever; // access the shared memory
+sops.sem_op= 1; // increment the semaphore
+semop(semid,&sops,(size_t) 1); // release the semaphore
+
+shmdt - detaches shared memory from process' virtual mem pool
+
+mmap() - map a file on disk to buffer in memmory
+PROT_NONE no access (Sys V)
+PROT_READ region may be read
+PROT_WRITE region may be written
+PROT_EXEC region may be executed
+MAP_SHARED share this mapping. Updates visible to other processes,
+and the underlying file is updated
+MAP_PRIVATE create a private copy-on-write mapping.
+Updates are not visible to other processes.
+Changes don't carry through to the underlying file
+only upcated when msync or munmap is called 
+
+IPC shell interface 
+ipcs [-q|-m|-s] Provides ipc status for
+(q) message queues
+(m) shared memory
+(s) semaphores
+No options; this command will print information for all three types of IPC.
+ipcrm [-q msqid|-m shmid|-s semid] or
+ipcrm [-Q msgkey|-M shmkey|-S semkey] Removes zero or more message queues, semaphore sets, 
+or shared memory segments.
+
+---lecture 10----
+sockets-IPC between one or more machines 
+datagrams-connectionless sockets with full addresses packets
+server/client-sender/receiver addresed used to establish connection that shortens packet headers(virtual circuit)
+must specify a 5-tuple
+
+socket() - 1-tuple
+bind() - 3-tuple
+listen() -5-tuple
+
+UDP User Data Protocol (connectionless, no guarantee of
+   delivery, uses IP)
+TCP Transmission Control Protocol (connection, reliable, full
+   duplex, byte stream, uses IP)
+ICMP Internet Control Message Protocol (handles error and
+    control between gateways and hosts, uses IP)
+IP Internet Protocol. Provides packet delivery for TCP, UDP,
+  ICMP.
+ARP Address Resolution Protocol (maps internet address to
+   hardware address)
+RARP Reverse Address Resolution Protocol (maps hardware
+    address to internet address)
+SPP Sequenced Packet Protocol (a Xerox Network Systems
+   protocol for reliable flow-controlled packet delivery)
+
+OSI layers
+Data 7. Application Network process to application
+Data 6. Presentation Data representation, encryption/decryption, con-
+vert dependent data to machine independent data
+Data 5. Session Interhost communication, managing sessions between applications
+Segments 4. Transport End-to-end connections, reliability, and flow control
+Packet 3. Network Path determination and logical addressingDatagram 
+Frame 2. Data link Physical addressing
+Bit 1. Physical Media, signal, and binary transmission
+
+tcp pros: connection orineted, message bounds, data checksum, ack, timeout, dup detect, sequence, flow control
+ip & udp pros: message boundaries
+
+listen() Establishes a connection-oriented socket (SOCK_STREAM or SEQPACKET)
+   
+sockets shutdown()
+SHUT_RD further reading (receptions) disallowed
+SHUT_WR further writing (transmissions) disallowed
+SHUT_RDWR subsequent reading and writing via sockfd is disallowed
+
+Reserved ports 1 -1023
+Automatically assignable ports 1024-5000
+Ports assigned by rresvport() 512 -1023
+resvport(int *port) returns a descriptor to a socket with an address in the privileged
+port space.
+Only the superuser privileged processes are allowed to bind an address with this
+sort of port to a socket.
+See /etc/services for a list of service names, ports, and protocol (ie. whether it uses udp or
+tcp)
+---lecture 11---
+ssl-simple sockets library (tcp)
+Sopen()-(servers)returns 3-tuple socket
+clients-returns 5-tuple socket
+
+how to handle multiple inputs
+polling, use fork and assing sep process to handle each stream
+or use threads
+
+daemon-process expected to run for a long time, usually in the bkg
+*no controlled terminal
+use syslog to log messages 
+SSL PortMaster is an example of this
+
+Daemon Coding Rules
+1. Set file mode creation mask to zero (umask)
+The inherited mask may override what the daemon sets
+The daemon is thereby in control of all its read/write/execute permissions.
+2. The parent process should call fork() and exit.
+(shells will then act as if the command is finished)
+The child gets its own process ID, has a parent, and so doesn't start as a process group
+leader.
+3. The nascent daemon then calls setsid() to create a new "session"
+daemon becomes a session leader of a new session
+daemon becomes a process group leader of a new process group
+daemon has no controlling terminal
+4. Change directory to the root directory
+allows mounted filesystems to be removed
+alternative: have a dedicated directory where the daemon's file-related work will be done
+5. Unneeded file descriptors the child inherited from the parent process should be closed
+6. (optional) use file and record locking (lockfile()) to permit only one instance of the running
+daemon
+
+resources limits
+soft kernel enforces this limit
+hard a ceiling for the soft limit
+examples below: 
+RLIMIT_AS RLIMIT_CORE max size of a core file (when 0, no core dumps created)
+RLIMIT_CPU cpu time limit (sec)
+RLIMIT_DATA max size of process' data segment
+RLIMIT_FSIZE max size of files a process may create
+RLIMIT_LOCKS limits qty of of flock+fcntl locks
+RLIMTI_MEMLOCK max qty of memory (bytes) that may be locked into ram
+RLIMIT_MSGQUEUE max qty of bytes allocated for POSIX message queues
+RLIMTI_NICE ceiling for a process' nice value (priority)
+RLIMIT_NOFILE  max size of process's virtual memory, in bytes
+specifies max file descriptor + 1 that may be opened
+
+syslog prioities
+LOG_EMERG, LOG_ALERT, LOG_CRIT, LOG_ERR, LOG_WARNING, LOG_NOTICE, LOG_INFO, LOG_DEBUG
+
+Daemons typically use the SIGHUP signal to tell them to re-read their configuration
+file. (as daemons don't have terminals this signal is safe them to use in this fashion)
+
+run as super user -> init 1
+shutdown -h now; shutdown system
+shutdown -r now: reboot system
+--lecture 12!---
+thread- lightweight process that has own stack, registers, signal mask, and scheduling priority
+less overhead and context switch vs child processes (REQUIRE PTHREAD)	
+CANNOT HAVE ATTACHABLE THREAD, BUT DETACHABLE AND JOINABLE
+All a process's threads share the same data and code segments
+A child process may use exec and have a completely different code and data (or
+merely copies thereof)
+A thread which calls exit() will terminate the entire process.
+A thread usually must synchronize access to global variables, often using
+semaphores or mutexes
+Threads are often used to facilitate use of multiple processors (cores)
+Threads may be associated with objects by the programmer (thereby facilitating
+object-oriented programming)
+
+models for threads
+boss/worker model: single thread handles inputs assigning to workesr
+peer model: each thread handles is own input
+pipeline model: threads hand parts of task and pass results along
+
+Kernel schedykes these LWP
+
+pthreads_join()
+Suspends the calling thread until the specified thread has terminated
+A pointer to the retval, if not null, becomes available
+This function is a lot like waitpid().
+If you don't pthread_join() non-detached threads, you end up with zombie threads
+
+Design of Posix thread committee
+A thread should be able to send and receive signals without any changes to how a
+process normally handles signals
+When a signal is delivered to a multi-threaded process, one of the threads will be
+   selected to handle the required action.
+That is, one of the process' threads will be interrupted
+Notes on thread signal handling:
+See the "Signal-Safe Function" document on the website
+Note that no pthread_ functions are on this list!
+No mutexes. No condition variables. Etc.
+A thread may use the sem_post() call, however, to communicate with other threads.
+
+#include <semaphore.h>
+int sem post(sem t *sem);
+Unlocks the semaphore pointed to by sem.
+used to sync threads 
+
+int pthread kill(pthread t thread, int sig);
+(compile and link with -pthread)
+Sends the specified sig to another thread in the same process
+
+scheduling scope: which threads contend for processing
+system scope Threads with system scope contend with all other threads with system
+scope, irrespective of which process to which they belong.
+process scope Threads with process scope contend only with other threads in the
+same process.
+
+scheduling allocation domain: a group of one or more processes which act as
+separate (LWP) scheduling targets.
+
+Whenever a higher priority thread becomes runnable than the currently running
+thread's priority, the lower priority thread is interrupted and put at the end of its
+ priority queue. This is known as an ***involuntary context switch***.
+
+Scheduling Policy: determines how long a thread runs after having been moved from
+a priority queue to a processing slot.
+
+SCHED_RR (round robin) allows a thread to run for a fixed amount of time known as a
+***quantum***. Such an interrupted thread is placed at the back of its priority queue.
+
+theads: setting scheduling parameters
+1. Declare a sched_param structure object
+2. Pick a policy via pthread_attr_setsched()
+3. Pick a priority within the policy's min/max bounds
+4. Assign it to ***.sched_priority
+5. Use it with pthread_attr_setschedparam()
+This sets up a static priority attribute for use with pthread_create().
+
+mutexes: 
+mutual exclusion lock. These control access to data by denying access
+to other threads; they resemble lightweight semaphores
+Condition variable functions: lets threads synchronize on the value of a c.v.
+
+Like semaphores, threads can produce deadlocks via mutexes: ***(aka deadly
+embrace)***
+
+PTHREAD MUTEX NORMAL suspends the thread forever, because the mutex is never
+unlocked by the owner thread itself
+
+priority inversion: a low prio thread acts like it has higher authority
+ 
+Priority inheritance allows a mutex to elevate the priority of its owner to that of
+the highest priority waiting thread
+
+A condition variable lets threads synchronize on a condition, which often
+involves the state/values of data
+
+sync: waiting from condition variable
+o If the condition one wants (say, a counter having reached some value) does not hold, one
+   may call either of the two functions above to wait for a c.v. signal
+o The thread will block upon calling one of these functions.
+o The thread must hold the mutex mtx in a locked state.
+
+*read lock problems
+If a thread is blocked waiting for a read-write lock for reading, and it receives a
+signal, after its signal handler returns the thread will resume waiting.
+
+posix semaphore are known as unamed semaphores 
+Unnamed semaphores have kernel persistence (semaphores will exist until the system is
+shut down or sem unlink() is used to remove them)
+- Posix semaphores can be released by any thread with access.

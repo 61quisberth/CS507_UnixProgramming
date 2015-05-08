@@ -1,0 +1,136 @@
+1/30
+CHPT. 3
+-what is chmod()
+-What is errno
+-7 types of unix files
+-1 Regular - text, bianary, exe, shell scripts
+-2 Directory - contains file names, where-to-find info
+-3 Link - hard link
+-4 Character Devices
+-5 Block Devices
+-6 Sockets
+-7 Named Pipes
+-Study superblocks for exam
+-File attributes: what is in an inode
+-File wont open if no permission, disk is out of space, or doesnt exist
+-Directory File Functions - opendir: return pointer to director DIR 
+
+2/6
+CHPT. 4
+-creat() what is the equivalent function? open()
+-fd may not be a file descriptor buy may be a pipe or socket
+-write will not succeed if buffers or hard disk is full
+-fcntl does butwise comparisons
+-File status functions: kind of looking into the i-nodes
+-1 given path
+-2 given file descriptor
+-3 symbolic link
+-sticky bit: prevents unpriviledged users from removing/renaming file in a directory even thogh it is world writable (study set bits)
+-what is fchmod()
+-EPOCH qty of seconds since 1/1/1970: time_t time<
+-time.h
+
+CHPT. 5
+-fcntl(): struct flock
+-Promotion & Splitting: locks
+-upon process termination all file locks are released (for that process) child processes do not inherit file locks
+-flock(): applies or removes advisory locks given a file descriptor
+-Mandatory lock
+-File lock dangers: deadlock - when 2 or more processes are each waiting for a resource that the other has locked
+-Directory API - making a directory
+-Device & FIFO File API
+-Anonymous pipes: -pipes are one way and sockets are two- typically used by 
+
+2/13 Lab04
+
+2/20
+CHPT. 6
+-Process states (green words)
+    -User Program
+    -Kernel Program
+    -ready to run, in memory
+    -sleeing, in memory
+    -sleeping, swapped
+    -preempted
+    -created
+    -zombie
+-Process Image (green words)
+-UNIX definitions (")
+-Querying Process Attributes
+-Changing Process Attribites
+-fork()
+-clone()
+-
+-
+-how would you set up a system call? How would you implement it
+
+2/27
+CHPT. 7
+-Signals
+-sigaction
+-siginfo
+-problems with malloc() - make sure interrupts are safe
+-setjmp, longjmp
+-kill()
+-
+
+3/20
+CHPT. 7 cont...?
+-IPC: Interprocess Communications
+-Keys
+-IPC flags
+-Semaphores: message queues dont really need them, are atomic: set of operations that cannot be interuppted by the kernel.
+-Semop
+-Semaphores: an example
+3/20
+-Shared Memory - involves no kernel copying operations (fast) unlike message queues and sockets
+-
+
+3/27 Class 9
+-Shared memory special number that works
+
+
+4/9 Sockets
+-sockets provide two way interprocess communications betweem processes on one or more machines
+-connectionless: each packet contains full addresses
+-connection-based: sender/receiver addresses used to establish a connection which simplifies
+-all sockets are 5-tuple
+-SOCK_DGRAMs do preserve record boundries BUT they are not reliable nor sequenced
+-SOCK_DGRAMs is a map of where a ping has traveled
+
+4/17 Sockets cont...
+-CRON is a daemon that allows you to edit a config file and modify things to happen at specific times; 'cron' is a system thing and 'at' is used by regular users
+-Unix doesn't have to reboot after updates because it can just tell daemons to reread themselves (unless you
+re updating the kernel)
+-know that start and kill scripts exist
+
+4/17 Threads - you may have to download threads
+=a light weight process which has its own stack, registers, sig mask, and scheduling priority
+does not have own data or program code, shre that with other threads, as well as share global memeory, file descriptors, etc
+-similar to child processes but require less of a context switch and less kernel overhead to manage it = faster
+-Threads are ofter used to facilitate the use of two cores together
+-a LWP(light weight process) is what is actually scheduled to be run by the kernel, thread is not exactly light weight: it can be thought of as a cirtual CPU: thead libraries communicate with LWPs to schedule threads
+-Threads are resources on your system, LWPs are sometimes called kernel threads
+-Thread creation
+-Thread termination: pthread_yield can hog cpu
+-Threads & Signals
+-A thread can handle a signal, signal handler calls some post, another thread is blocked by a semaphore. the function gets called and releases thread, will only operate when signal is called
+-Setting up a thread's stack
+-Can you have an attachable thread? no but detachable abd joinable
+-don't join thread that has already been joined, could be blocked for ever, dont join a detached thread
+-thread_deach has sleep(2) at the end to ensure that the threads are finished, without it, it may never return
+-scheduling scope: which threads content for processing
+-scheduling allocation domain: a group of one or more processes which act as seperate LWP scheduling targets 
+-involuntary context switch*
+-scheduling policies: fifo, round robin (quantums), other (default - round robin with priority adjustments)
+-Threads: scope priority policy
+
+
+
+Mutexes
+-slide 38/54: pthread mutex normal
+-slide 40/54: priority inversion: a lower priority thread acts like it has higher authority 
+-slide 45/54
+-48/54 what kind of problems could happen with a read lock?
+-some midterm questions
+

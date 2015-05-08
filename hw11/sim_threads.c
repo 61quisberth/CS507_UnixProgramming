@@ -22,7 +22,7 @@ void* doSomeThing(void *arg)
 
 
 	// do this for a while
-	for(i=0; i<(2000);i++);
+	for(i=0; i<(200);i++);
 
 	return NULL;
 }
@@ -43,6 +43,6 @@ int main(void)
 		i++;
 	}
 
-	sleep(5);
+	sleep(2);
 	return 0;
 }
