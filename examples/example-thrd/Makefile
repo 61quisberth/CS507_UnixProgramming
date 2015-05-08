@@ -1,58 +1,59 @@
+
 all : thrd1 thrd2 thrdcond thrd_detached thrdmutex thrdstack thrdstacksize thrd_defines thrdprioinherit thrd_timedwait thrd_unnamedsem thrdpolicy thrdscope thrdprio thrd_rdlock pingpong1 pingpong2 pingpong3
 
 thrd1 : thrd1.c
-	ccd thrd1
+	cc thrd1 -o thrd1
 
 thrd2 : thrd2.c
-	ccd thrd2
+	cc thrd2 -o thrd2
 
 thrdcond : thrdcond.c
-	ccd thrdcond
+	cc thrdcond -o thrdcond
 
 thrd_detached : thrd_detached.c
-	ccd thrd_detached
+	cc thrd_detached -o thrd_detached
 
 thrdmutex : thrdmutex.c
-	ccd thrdmutex
+	cc thrdmutex
 
 thrdstack : thrdstack.c
-	ccd thrdstack
+	cc thrdstack
 
 thrdstacksize : thrdstacksize.c
-	ccd thrdstacksize
+	cc thrdstacksize
 
 thrd_defines : thrd_defines.c
-	ccd thrd_defines
+	cc thrd_defines
 
 thrdprioinherit : thrdprioinherit.c
-	ccd thrdprioinherit
+	cc thrdprioinherit
 
 thrd_timedwait : thrd_timedwait.c
-	ccd thrd_timedwait
+	cc thrd_timedwait
 
 thrd_unnamedsem : thrd_unnamedsem.c
-	ccd thrd_unnamedsem
+	cc thrd_unnamedsem
 
 thrdscope : thrdscope.c
-	ccd thrdscope
+	cc thrdscope
 
 thrdpolicy : thrdpolicy.c
-	ccd thrdpolicy
+	cc thrdpolicy
 
 thrdprio : thrdprio.c
-	ccd thrdprio
+	cc thrdprio
 
 thrd_rdlock : thrd_rdlock.c
-	ccd thrd_rdlock
+	cc thrd_rdlock
 
 pingpong1 : pingpong1.c
-	ccd pingpong1
+	cc pingpong1
 
 pingpong2 : pingpong2.c
-	ccd pingpong2
+	cc pingpong2
 
 pingpong3 : pingpong3.c
-	ccd pingpong3
+	cc pingpong3
 
 clean :
 	/bin/rm -f *.o thrd[12] core.* thrdcond thrd_detached thrdmutex thrdstack thrdstacksize thrd_defines thrdprioinherit thrd_unnamedsem thrd_timedwait thrdpolicy thrdscope thrdprio thrd_rdlock pingpong1 pingpong2 pingpong3 thrd_rdlock.dat
